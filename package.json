@@ -1,7 +1,7 @@
 {
   "name": "pdfbind-web",
   "private": true,
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Website for PDFbind — scrape all PDFs from a webpage and merge them into one downloadable booklet",
   "author": "Jay Deaton",
   "license": "MIT",
