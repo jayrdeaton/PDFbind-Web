@@ -72,6 +72,10 @@
             <input v-model="reverse" type="checkbox" :disabled="binding" class="w-4 h-4 accent-sky-500 disabled:opacity-50" />
             <span class="text-sm text-gray-700 dark:text-zinc-300">Reverse</span>
           </label>
+          <label class="flex items-center gap-2 cursor-pointer select-none">
+            <input v-model="autoDownload" type="checkbox" :disabled="binding" class="w-4 h-4 accent-sky-500 disabled:opacity-50" />
+            <span class="text-sm text-gray-700 dark:text-zinc-300">Auto-download</span>
+          </label>
           <button :disabled="binding" class="flex items-center gap-1 text-sm text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-200 disabled:opacity-50 transition-colors" @click="showAdvanced = !showAdvanced">
             Advanced
             <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" :class="showAdvanced ? 'rotate-180' : ''" class="transition-transform">
@@ -102,11 +106,18 @@
             <label for="exclude" class="block text-sm font-medium text-gray-500 dark:text-zinc-400 mb-1.5">Exclude <span class="font-normal text-gray-400 dark:text-zinc-500">(regex)</span></label>
             <input id="exclude" v-model="exclude" type="text" placeholder="appendix" :disabled="binding" class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none focus:border-sky-500 disabled:opacity-50 transition-colors" />
           </div>
+          <div>
+            <label for="preview-pages" class="block text-sm font-medium text-gray-500 dark:text-zinc-400 mb-1.5">Preview pages</label>
+            <input id="preview-pages" v-model.number="previewPages" type="number" min="1" placeholder="All pages" :disabled="binding" class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none focus:border-sky-500 disabled:opacity-50 transition-colors" />
+          </div>
         </div>
 
-        <!-- Submit -->
-        <button :disabled="!url.trim() || binding" class="w-full bg-sky-500 hover:bg-sky-400 disabled:bg-gray-100 dark:disabled:bg-zinc-800 disabled:text-gray-400 dark:disabled:text-zinc-600 text-white font-semibold rounded-lg py-3 text-sm transition-colors" @click="bind">
-          {{ binding ? 'Binding…' : 'Bind PDFs' }}
+        <!-- Submit / Cancel -->
+        <button v-if="!binding" :disabled="!url.trim()" class="w-full bg-sky-500 hover:bg-sky-400 disabled:bg-gray-100 dark:disabled:bg-zinc-800 disabled:text-gray-400 dark:disabled:text-zinc-600 text-white font-semibold rounded-lg py-3 text-sm transition-colors" @click="bind">
+          Bind PDFs
+        </button>
+        <button v-else class="w-full bg-red-500 hover:bg-red-400 text-white font-semibold rounded-lg py-3 text-sm transition-colors" @click="cancel">
+          Cancel
         </button>
       </div>
 
@@ -117,9 +128,59 @@
         <span v-if="binding" class="text-zinc-500 animate-pulse">▌</span>
       </div>
 
-      <!-- Download -->
-      <div v-if="downloadUrl" class="flex justify-center">
-        <a :href="downloadUrl" :download="downloadFilename" class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-400 text-black font-semibold rounded-lg px-7 py-3 text-sm transition-colors"> ↓ Download {{ downloadFilename }} </a>
+      <!-- PDF preview -->
+      <div v-if="previewItem" ref="previewContainer" class="mb-6">
+        <iframe :src="previewItem.blobUrl" class="w-full rounded-2xl border border-gray-200 dark:border-zinc-800 shadow-sm dark:shadow-none" style="height: 520px;" title="PDF preview" />
+      </div>
+
+      <!-- History -->
+      <div v-if="history.length > 0" class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl mb-6 shadow-sm dark:shadow-none overflow-hidden">
+        <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 dark:border-zinc-800">
+          <span class="text-sm font-medium text-gray-500 dark:text-zinc-400">History</span>
+          <button class="text-xs text-gray-400 dark:text-zinc-500 hover:text-red-500 dark:hover:text-red-400 transition-colors" @click="clearHistory">Clear all</button>
+        </div>
+        <div
+          v-for="(item, index) in history"
+          :key="item.id"
+          :class="[
+            'flex items-center gap-3 px-5 py-3 cursor-pointer transition-colors',
+            index < history.length - 1 ? 'border-b border-gray-100 dark:border-zinc-800' : '',
+            activePreviewId === item.id
+              ? 'bg-sky-50 dark:bg-sky-950/30'
+              : 'hover:bg-gray-50 dark:hover:bg-zinc-800/50'
+          ]"
+          @click="activePreviewId = item.id"
+        >
+          <!-- PDF icon -->
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 text-gray-400 dark:text-zinc-500">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+          </svg>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-baseline gap-2">
+              <p class="text-sm font-medium truncate">{{ item.filename }}</p>
+              <span class="flex-shrink-0 text-xs text-gray-400 dark:text-zinc-500">{{ formatSize(item.size) }}</span>
+            </div>
+            <div class="flex items-center gap-1.5 mt-0.5 flex-wrap">
+              <span v-for="badge in settingBadges(item.settings)" :key="badge" class="inline-block text-xs px-1.5 py-0.5 rounded bg-gray-100 dark:bg-zinc-800 text-gray-500 dark:text-zinc-400">{{ badge }}</span>
+              <p v-if="settingBadges(item.settings).length === 0" class="text-xs text-gray-400 dark:text-zinc-500 truncate">{{ item.sourceUrl }}</p>
+            </div>
+          </div>
+          <span class="flex-shrink-0 text-xs text-gray-400 dark:text-zinc-500">{{ formatTime(item.timestamp) }}</span>
+          <a
+            :href="item.blobUrl"
+            :download="item.filename"
+            class="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black transition-colors"
+            title="Download"
+            @click.stop
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+          </a>
+        </div>
       </div>
 
       <!-- Divider -->
@@ -184,6 +245,7 @@ const url = ref('')
 const sort = ref(false)
 const reverse = ref(false)
 const limitValue = ref<number | null>(null)
+const previewPages = ref<number | null>(null)
 const selector = ref('')
 const include = ref('')
 const exclude = ref('')
@@ -193,8 +255,74 @@ const binding = ref(false)
 const progress = ref<string[]>([])
 const progressContainer = ref<HTMLElement | null>(null)
 const error = ref<string | null>(null)
-const downloadUrl = ref<string | null>(null)
-const downloadFilename = ref('')
+const autoDownload = ref(true)
+
+interface HistorySettings {
+  sort: boolean
+  reverse: boolean
+  limit: number | null
+  pages: number | null
+  selector: string
+  include: string
+  exclude: string
+  trim: number | null
+}
+
+interface HistoryItem {
+  id: number
+  filename: string
+  blobUrl: string
+  timestamp: Date
+  sourceUrl: string
+  size: number
+  settings: HistorySettings
+}
+
+const history = ref<HistoryItem[]>([])
+const activePreviewId = ref<number | null>(null)
+const previewContainer = ref<HTMLElement | null>(null)
+let nextId = 0
+
+const previewItem = computed(() => {
+  if (history.value.length === 0) return null
+  if (activePreviewId.value !== null) {
+    return history.value.find((h) => h.id === activePreviewId.value) ?? history.value[0]
+  }
+  return history.value[0]
+})
+
+onMounted(() => {
+  const stored = localStorage.getItem('autoDownload')
+  if (stored !== null) autoDownload.value = stored !== 'false'
+})
+
+watch(autoDownload, (v) => localStorage.setItem('autoDownload', String(v)))
+
+const clearHistory = () => {
+  history.value.forEach((item) => URL.revokeObjectURL(item.blobUrl))
+  history.value = []
+  activePreviewId.value = null
+}
+
+const formatTime = (date: Date): string =>
+  date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+
+const formatSize = (bytes: number): string => {
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`
+}
+
+const settingBadges = (s: HistorySettings): string[] => {
+  const badges: string[] = []
+  if (s.sort) badges.push('sorted')
+  if (s.reverse) badges.push('reversed')
+  if (s.limit) badges.push(`${s.limit} PDFs`)
+  if (s.pages) badges.push(`${s.pages} pages`)
+  if (s.selector) badges.push('selector')
+  if (s.include || s.exclude) badges.push('filtered')
+  if (s.trim) badges.push('trimmed')
+  return badges
+}
 
 const features = [
   {
@@ -228,14 +356,14 @@ watch(
   }
 )
 
+const cancel = () => {
+  eventSource?.close()
+  binding.value = false
+  progress.value.push('Cancelled.')
+}
+
 const bind = () => {
   if (!url.value.trim() || binding.value) return
-
-  if (downloadUrl.value) {
-    URL.revokeObjectURL(downloadUrl.value)
-    downloadUrl.value = null
-    downloadFilename.value = ''
-  }
 
   binding.value = true
   progress.value = []
@@ -245,6 +373,7 @@ const bind = () => {
   if (sort.value) params.set('sort', 'true')
   if (reverse.value) params.set('reverse', 'true')
   if (limitValue.value != null && limitValue.value > 0) params.set('limit', String(limitValue.value))
+  if (previewPages.value != null && previewPages.value > 0) params.set('pages', String(previewPages.value))
   if (selector.value.trim()) params.set('selector', selector.value.trim())
   if (include.value.trim()) params.set('include', include.value.trim())
   if (exclude.value.trim()) params.set('exclude', exclude.value.trim())
@@ -253,7 +382,7 @@ const bind = () => {
   eventSource?.close()
   eventSource = new EventSource(`/api/bind?${params.toString()}`)
 
-  eventSource.onmessage = (event) => {
+  eventSource.onmessage = async (event) => {
     type BindEvent = { type: 'progress'; message: string } | { type: 'complete'; data: string; filename: string; mimeType: string } | { type: 'error'; message: string }
 
     const msg = JSON.parse(event.data as string) as BindEvent
@@ -265,14 +394,41 @@ const bind = () => {
       const bytes = new Uint8Array(byteStr.length)
       for (let i = 0; i < byteStr.length; i++) bytes[i] = byteStr.charCodeAt(i)
       const blob = new Blob([bytes], { type: msg.mimeType })
-      downloadUrl.value = URL.createObjectURL(blob)
-      downloadFilename.value = msg.filename
+      const blobUrl = URL.createObjectURL(blob)
+      const id = ++nextId
+
+      history.value.unshift({
+        id,
+        filename: msg.filename,
+        blobUrl,
+        timestamp: new Date(),
+        sourceUrl: url.value.trim(),
+        size: blob.size,
+        settings: {
+          sort: sort.value,
+          reverse: reverse.value,
+          limit: limitValue.value,
+          pages: previewPages.value,
+          selector: selector.value.trim(),
+          include: include.value.trim(),
+          exclude: exclude.value.trim(),
+          trim: trim.value
+        }
+      })
+      activePreviewId.value = id
+
       binding.value = false
       eventSource?.close()
-      const a = document.createElement('a')
-      a.href = downloadUrl.value
-      a.download = msg.filename
-      a.click()
+
+      await nextTick()
+      previewContainer.value?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+
+      if (autoDownload.value) {
+        const a = document.createElement('a')
+        a.href = blobUrl
+        a.download = msg.filename
+        a.click()
+      }
     } else if (msg.type === 'error') {
       error.value = msg.message
       binding.value = false
@@ -291,6 +447,6 @@ const bind = () => {
 
 onUnmounted(() => {
   eventSource?.close()
-  if (downloadUrl.value) URL.revokeObjectURL(downloadUrl.value)
+  history.value.forEach((item) => URL.revokeObjectURL(item.blobUrl))
 })
 </script>
