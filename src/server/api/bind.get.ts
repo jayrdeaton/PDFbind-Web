@@ -1,4 +1,4 @@
-import { buildBooklet } from 'pdfbind'
+import { buildBooklet } from 'grapdf'
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event)
