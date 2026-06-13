@@ -188,7 +188,7 @@
         </div>
 
         <!-- Divider -->
-        <div class="mt-24 pt-12 border-t border-gray-200 dark:border-zinc-800">
+        <div v-if="!isPwa" class="mt-24 pt-12 border-t border-gray-200 dark:border-zinc-800">
           <h2 class="text-2xl font-semibold mb-8 text-center">Also available as a CLI</h2>
 
           <!-- Install + Usage -->
@@ -262,6 +262,7 @@ const progress = ref<string[]>([])
 const progressContainer = ref<HTMLElement | null>(null)
 const error = ref<string | null>(null)
 const autoDownload = ref(true)
+const isPwa = ref(false)
 
 interface HistorySettings {
   sort: boolean
@@ -298,6 +299,7 @@ const previewItem = computed(() => {
 })
 
 onMounted(() => {
+  isPwa.value = window.matchMedia('(display-mode: standalone)').matches || (navigator as Navigator & { standalone?: boolean }).standalone === true
   const splash = document.getElementById('splash')
   if (splash) {
     splash.style.opacity = '0'

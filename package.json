@@ -1,8 +1,9 @@
 {
   "name": "grapdf-web",
+  "displayName": "GraPDF",
   "private": true,
   "version": "1.0.9",
-  "description": "Website for GraPDF — scrape all PDFs from a webpage and merge them into one downloadable booklet",
+  "description": "Merge all PDFs from any webpage into one booklet.",
   "author": "Jay Deaton",
   "license": "MIT",
   "type": "module",

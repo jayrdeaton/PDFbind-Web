@@ -1,4 +1,7 @@
+import { readFileSync } from 'node:fs'
+
 import type {} from './.nuxt/nuxt.node.d.ts'
+const pkg: { displayName: string; description: string } = JSON.parse(readFileSync('./package.json', 'utf-8'))
 export default defineNuxtConfig({
   compatibilityDate: '2025-11-01',
   srcDir: 'src',
@@ -11,9 +14,9 @@ export default defineNuxtConfig({
   pwa: {
     registerType: 'autoUpdate',
     manifest: {
-      name: 'GraPDF',
-      short_name: 'GraPDF',
-      description: 'Merge all PDFs from any webpage into one booklet.',
+      name: pkg.displayName,
+      short_name: pkg.displayName,
+      description: pkg.description,
       theme_color: '#09090b',
       background_color: '#09090b',
       display: 'standalone',
