@@ -2,7 +2,7 @@
   "name": "grapdf-web",
   "displayName": "GraPDF",
   "private": true,
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Merge all PDFs from any webpage into one booklet.",
   "author": "Jay Deaton",
   "license": "MIT",
