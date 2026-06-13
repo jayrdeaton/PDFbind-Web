@@ -4,13 +4,42 @@ export default defineNuxtConfig({
   srcDir: 'src',
   serverDir: 'src/server',
   devtools: { enabled: true },
-  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/color-mode'],
+  modules: ['@nuxtjs/tailwindcss', '@nuxtjs/color-mode', '@vite-pwa/nuxt'],
   colorMode: {
     classSuffix: ''
   },
+  pwa: {
+    registerType: 'autoUpdate',
+    manifest: {
+      name: 'GraPDF',
+      short_name: 'GraPDF',
+      description: 'Merge all PDFs from any webpage into one booklet.',
+      theme_color: '#09090b',
+      background_color: '#09090b',
+      display: 'standalone',
+      start_url: '/',
+      scope: '/',
+      icons: [
+        { src: '/icon-180.png', sizes: '180x180', type: 'image/png' },
+        { src: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+        { src: '/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any maskable' }
+      ]
+    },
+    workbox: {
+      globPatterns: ['**/*.{js,css,html,svg,ico,woff2}']
+    }
+  },
   app: {
     head: {
-      link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }]
+      meta: [
+        { name: 'viewport', content: 'width=device-width, initial-scale=1.0, viewport-fit=cover' },
+        { name: 'apple-mobile-web-app-capable', content: 'yes' },
+        { name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent' }
+      ],
+      link: [
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'apple-touch-icon', href: '/icon-180.png' }
+      ]
     }
   },
   css: ['~/assets/css/main.css'],

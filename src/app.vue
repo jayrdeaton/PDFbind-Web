@@ -1,227 +1,236 @@
 <template>
-  <div class="min-h-screen bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-zinc-100 flex flex-col transition-colors duration-200">
-    <!-- Header -->
-    <header class="border-b border-gray-200 dark:border-zinc-800 px-6 py-4 flex-shrink-0">
-      <div class="max-w-3xl mx-auto flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <img src="/icon.svg" alt="GraPDF" class="w-6 h-6" />
-          <span class="text-base font-semibold tracking-tight">GraPDF</span>
-        </div>
-        <div class="flex items-center gap-3">
-          <button :aria-label="colorMode.preference === 'system' ? 'System mode' : colorMode.preference === 'light' ? 'Light mode' : 'Dark mode'" class="p-1.5 rounded-lg text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-200 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors" @click="cycleColorMode">
-            <!-- Monitor: auto/system -->
-            <svg v-if="colorMode.preference === 'system'" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="3" width="20" height="14" rx="2" />
-              <line x1="8" y1="21" x2="16" y2="21" />
-              <line x1="12" y1="17" x2="12" y2="21" />
-            </svg>
-            <!-- Sun: light mode -->
-            <svg v-else-if="colorMode.preference === 'light'" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="5" />
-              <line x1="12" y1="1" x2="12" y2="3" />
-              <line x1="12" y1="21" x2="12" y2="23" />
-              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
-              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
-              <line x1="1" y1="12" x2="3" y2="12" />
-              <line x1="21" y1="12" x2="23" y2="12" />
-              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
-              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-            </svg>
-            <!-- Moon: dark mode -->
-            <svg v-else xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-            </svg>
-          </button>
-          <a href="https://www.npmjs.com/package/grapdf" target="_blank" rel="noopener" aria-label="npm" class="p-1.5 rounded-lg text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-200 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="currentColor" aria-hidden="true">
-              <path d="M0 0v18h18V0H0zm14.5 14.5H9V5H5.5v9.5H3.5V3.5h11v11z" />
-            </svg>
-          </a>
-          <a href="https://github.com/jayrdeaton/grapdf" target="_blank" rel="noopener" aria-label="GitHub" class="p-1.5 rounded-lg text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-200 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
-            </svg>
-          </a>
-        </div>
-      </div>
-    </header>
-
-    <!-- Main -->
-    <main class="flex-1 max-w-3xl mx-auto w-full px-6 py-14">
-      <!-- Hero -->
-      <div class="mb-10 text-center">
-        <h1 class="text-4xl font-bold tracking-tight mb-3">Merge all PDFs from any webpage into one booklet.</h1>
-        <p class="text-gray-500 dark:text-zinc-400 text-lg leading-relaxed">Paste a URL containing PDF links, configure your options, and download a merged PDF in seconds.</p>
-      </div>
-
-      <!-- Binder card -->
-      <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl p-6 mb-6 shadow-sm dark:shadow-none">
-        <!-- URL -->
-        <div class="mb-5">
-          <label for="url-input" class="block text-sm font-medium text-gray-500 dark:text-zinc-400 mb-1.5">Page URL</label>
-          <input id="url-input" v-model="url" type="url" placeholder="https://example.com/documents" :disabled="binding" class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-300 dark:border-zinc-700 rounded-lg px-4 py-2.5 text-sm placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none focus:border-emerald-500 disabled:opacity-50 transition-colors" />
-        </div>
-
-        <!-- Quick options -->
-        <div class="flex flex-wrap gap-x-5 gap-y-3 mb-5 items-center">
-          <label class="flex items-center gap-2 cursor-pointer select-none">
-            <input v-model="sort" type="checkbox" :disabled="binding" class="w-4 h-4 accent-emerald-500 disabled:opacity-50" />
-            <span class="text-sm text-gray-700 dark:text-zinc-300">Sort</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer select-none">
-            <input v-model="reverse" type="checkbox" :disabled="binding" class="w-4 h-4 accent-emerald-500 disabled:opacity-50" />
-            <span class="text-sm text-gray-700 dark:text-zinc-300">Reverse</span>
-          </label>
-          <label class="flex items-center gap-2 cursor-pointer select-none">
-            <input v-model="autoDownload" type="checkbox" :disabled="binding" class="w-4 h-4 accent-emerald-500 disabled:opacity-50" />
-            <span class="text-sm text-gray-700 dark:text-zinc-300">Auto-download</span>
-          </label>
-          <button :disabled="binding" class="flex items-center gap-1 text-sm text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-200 disabled:opacity-50 transition-colors" @click="showAdvanced = !showAdvanced">
-            Advanced
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" :class="showAdvanced ? 'rotate-180' : ''" class="transition-transform">
-              <polyline points="6 9 12 15 18 9" />
-            </svg>
-          </button>
-        </div>
-
-        <!-- Advanced options -->
-        <div v-if="showAdvanced" class="grid sm:grid-cols-2 gap-4 mb-5 pt-4 border-t border-gray-100 dark:border-zinc-800">
-          <div>
-            <label for="limit" class="block text-sm font-medium text-gray-500 dark:text-zinc-400 mb-1.5">Limit</label>
-            <input id="limit" v-model.number="limitValue" type="number" min="1" placeholder="No limit" :disabled="binding" class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none focus:border-emerald-500 disabled:opacity-50 transition-colors" />
+  <div>
+    <div id="splash" style="position: fixed; inset: 0; display: flex; align-items: center; justify-content: center; z-index: 9999; transition: opacity 0.25s">
+      <img
+        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAARGVYSWZNTQAqAAAACAABh2kABAAAAAEAAAAaAAAAAAADoAEAAwAAAAEAAQAAoAIABAAAAAEAAAC0oAMABAAAAAEAAAC0AAAAAFbVlnkAAAGdaVRYdFhNTDpjb20uYWRvYmUueG1wAAAAAAA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJYTVAgQ29yZSA2LjAuMCI+CiAgIDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+CiAgICAgIDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiCiAgICAgICAgICAgIHhtbG5zOmV4aWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20vZXhpZi8xLjAvIj4KICAgICAgICAgPGV4aWY6UGl4ZWxYRGltZW5zaW9uPjUxMjwvZXhpZjpQaXhlbFhEaW1lbnNpb24+CiAgICAgICAgIDxleGlmOlBpeGVsWURpbWVuc2lvbj41MTI8L2V4aWY6UGl4ZWxZRGltZW5zaW9uPgogICAgICA8L3JkZjpEZXNjcmlwdGlvbj4KICAgPC9yZGY6UkRGPgo8L3g6eG1wbWV0YT4KuC9IVwAAQABJREFUeAHtvQn8ZVV1JrprgKKKeR4FREAZjCiDojgEcUDB2B2nRBMymERNWvPS2nlJ9+vX+b0MrzPY7yUxQ5tEtBNbEY0mDolBiTY4MRoVFEFGkRlkhirgrW+t9a299j77/P+3iipi8jxV/7PX/ta3vrX2Pvuee+6593//Kx6RrfwzbQ9L6tvuvadcc8dt+nPhddeUr9xwfbny9lvKrffcU+5d/2B56OGHS1nRFbgCAMpOjmRmNqjDAQ40hlyJh3SvsULIjwTqDOUavkKiHgHcbcp0XO3sD3yq4S7LyI7EhkbCIKn5hW11WpLMDTtp5PFTDmOgFlRWrVhZtt1667LL2m3LQTvuVo7Yba9yzF6PK4/bfudywA67lF22Wac5LeNjv1/xWC/o6757R7nwuqvLuVddUS6+/tpyxW23lDvuu7fc8+CDenBWrlxZVsrM4kDopHJmOTeYdT2snaPrKn2EwTHEBVzRPUhGXMQOaLXYztnn6vvIgW2CCzDBjDrEF+aaLujNg3Sh+BqFB/PDIvDQIw+rzrZbbV12ksV88E67lqP22K88c9+DytF77lf23W4nL/qxaR6TBX3DXXeWT152SfnoJf9Uzrv26nKj9DfIRODRvnpVXcDNkEcTrNjAMYBUa4QHFsZ44SR31AWsW6/TPCkwmY1GdNyY8DyRPngTecKbixc8uGEkLGnCTJTwNBg6tvzzGV+5OAnIaVwXuOzxjIpFvmrlqrLnuu3LsXvtX055whHlhQc8qey17Q4hv6WMLbqgL5Az8bvP/0L5xNe/Wq6943aduK1WrdKFHANqJs7REQaX4smp5mCFJUrkifiENAsm6SwaH5oISPGB51zJ7s1RPsUW1O1Sq3zEp2SKdWTFEodmg6MjcTFfSaPh2SGCFxvO3Q8+9JCG7bf9TuXkAw8rpx359HL0Ho8zwhbYb5EF/YWrryzvOPdsWchfK3c9cH/ZevVqecSunJbfTYYSRhgcivfOPMlJvqdFfOIoNiKKYwSPsNDtnF1Xsy6KIXlw5xfOnCZC67V7COmi4kLTWNlxfTa4p28wr0m1Gcy2pjDE+4TlKl5wOXPLWfvBhx8q22+9jS7snz/q2eUZex9Ilc3WbtYFfdnNN5Xf/cwny5lfvlCuiR8o26zeqqxYKQNKxyUq54gDEGOEwc+ZV24SG/FnMTh4mMRe5HpZc2vS6S7yUBealUZUkYRXhliB05D6mrE6m+4mOMcnh3Kxs3nSi4EFNUHjDCVFfzDUIiwFLjIqBr6mEQF7IWkKWoU47AW0tHIj4IGHNugLy1cc8pTy1qOfXw7Zefec7lHZm2VBP7BhQ/nTz3+2/N5n/qHgetkWMurigG1yo1LCASRqxmA3XO80WApYFk+EMFNtgS2qyQDXYDeFt/W7Y8SDq194czzlulZulD8I6iHpA0LV3LTf8LyjTZojBCRXaAgGmP2wlesv8MNvy/v+h9brdfW/P/rE8nNPfmZZs2o11B/V9qgX9CU3fqe87W8/WM765qVla1wfy4sBG5aPsC9PB5jAvk9Xf3AVl+ka4bMaCEpOfQEDKGGq29II5dAp1ml03WEsRHoeAcW7hTPiD+MxL1FhTdJg7h9gmA4uRKbUs2/Dtdo4dQ3feRlTHcXNGedzCng5uDmAS5EX7P/E8tsnvKwcvute7tm05lEt6DMuPr/8h49+yM7KW3WPrq7wKK+ZJEeH2AAcXSZAYkCtWHJqfBeQ3F6NNSO8wVInmUtqTHgCNJgtmhZLig3XcZ1nLiUQxN6YuZcI0KkQ2WY0CDd8iffM0UIHd0SwGdcjBMtcdOC5f8P6srfcBfmvz35ZedUhT9W4Tdlt0oLGrZnf/NQnym+f/Ukp5pGyOr/g0zHYQJqCBpCOrCFJRycBQ+wCuq6GjTA4RjiPhAb6bsSbjc+BThrFj7ChJog+zlFMjyV6VNJwUieZwR3VsCSvc3bd0B3hggG2JZwIDe4KjqG3QdYVDtPb5Lr6V497QXs3zOnLNRu9oO+Td+9+8SNnlHef9/myRu5erJB7ySxdk22WhYNJyIta7JEuEoLab4GJEXbWkwDgHVS5nWBoAE+dZEZEh6Fb7zoEy2V4tkqFdPGIwNDB6Ld6T5he0Zvl1uEqe5BH9UUALioa1mf2vmsEv9HMOjPvWIoM62UobvXhReNPHP708t+e82/KWrmxsDHbRi3ou+UW3Bs++N6CS4218s4QiolNK5NpaEDxZg7JIwy+wMOwiK6r4AgLDTj9kCiPfQ/yxsTTfoQHBgOaDgS+aLzxqDKZJ7g7TeV2mNJkju1llWlq4Mzl2LxGzBBFNP0jg+OnLz1SHUrxqfBZVo0aqlmlRmk9zpBI5bnMnTXIv1cuQV4tlx5//IOvLNttvaYGLmMNbg6PI/C5ijecaYt5nbyXb9dHKNMrRlgyVWW5vpIQJ8SeGz4a3oK3LNdnG7oxW3NBSTeniqPDOBdCl1DDzx23BzxVCe0UM+IOMETYx2/gTITR04C4RzDC6i0308D5lNykqgWOcGCcWh2O96lLnwqgZq82hi585AkcfgC+rZMz8/u/eVF54z9+oNy74UHCy7YLLWhc2/ySXGac8eXzCxazbVKKFoCWlbAVRjKbKnq8iYUTP6494TZKtcMwje2CQt/pnbuK9JY9TRrKBDPBI3iCucaonglXss5hKpOc0FMs1d/36WpwLiUbpy1aEGxT2drlUamHOvHw8TY8IOxfdUxKEz3N6i2YmgI7NdiY0rqttipnyKL+pc9+WK+vXXnJZqEF/VvyAvB0uWZeJ5cZzaYjQSUoM21eXEKmZnAY6y3w8KWwOazBqSFg3NHYWI3Kr0/r1K2+sJr8gU4N1BNc15uyDAneHAF41sj2UjG9DzXh8sU2puXZN+NqCwEtcURhCWBcGaefWPTdYF/jPFa1sJMND4RHZL6wrHENffrXv1R+64KzzLnMftkF/YEvXyB3M/5e375GAc2GzLqxlU4y3WlYj2NUitHBFlHZDpUlDPA9JkLDsLiuq+AIgyNwGtLSNDXr9xhjJziADLqdoaxL21sc2HpqZJCgNJN2xVqREY7LxpAQui60DLiEnr0Fh6t310tPI1NjwnUg4/pg8BzTxjKhQrzh8jsXfKqcefnFU1qHLLmgL73xBn3TBEWu1LsZlkRnsp+hXGlO4iEZMnsQMDqrgjzSUIwOqVDl2E/ZFE996vVU8hRnx3P33E4uug3PNTBPDe7sBTBS7HIAcUD8KlVMXTwuZ+PvMEQgpOPyAYL4rMFDipDYpMM+uYjXhay6RCUC3MSnxgiDr+LIgB+pR0AqaiswPk6MZ8u3nvs35dLbb1Te3G52Qd+/fr0s5jPlTZPvyn1mvvsnKVBFpHRZq2WaYxYXhy5eli6hyh0ECAQWXgjpjw4N/YwlGzz8y20T6z7FJA7ayocGfxRxPPENaXGNpwa4sL0PJnOjzf9GuGJeg2jIrzaEllkC6EQhQ90Gs2bOocMWR3/u0MPqklDXvsT3EppZQIxFHxhkJC6rq9xaKyzqQ0Ft3SOnKYKBvPihFtbgDffeWd52zkf0TRjojLbu7b1KeecXzyn/IG9nr5UL8ypLP1L5lkxCsy1mSQ6a6TFQ+nk2xYvfZFkvb4eixaf08Jb6arzPzxBPgC7OXtoqZhampZ7VjAwP4zlJhFoN56eacPAQrOW7TGik/JpD/MpmR+XswOFBrLW5Blyq4xpK9V3WeEjm4UG5N4sX58D1IwasT2JVIwfD9vxjn9djlUYkubl0YiqJXAmweZFUUgvg5GpsxMKnukkcUYzjcEzD9IgxfptVW5WzrrusvPOSL5R/9wPPBjzZhvehr7j15nLiH79dfj3qXv/Yp5eaM0AqFTdVniDTEXUaWMC4qb7z2rXluP0OLCcccHA5cs+9y+7bbq8HcaKI/F7akrVMApcDsjC43l9qvCq5LGG5xObvZPDO7F3y6cVv3n5z+eL1V5VzrvtWuerOW/0XJPDs2W1NPDq+THzhdex4oGachzpPL2y7ZqaiPEBF3h6mhjE1TxLUVB13siKej0effOQJiXqqIx08qPFrXp9++c+XJ8ivgPXbcEH/3Jl/Wd6ldzVwdk5VaLQOy3SabEm6x6MfxiQeZ6Bt5Qb6a486rvzMMc8qR8hC1tlKst83bQZuuueu8uFv/lN5xwWfLd+4/Sb9dGMzN800oyPHbIJ5RMKd2XGtmxekRVqgLeianf3QoivlCUjIaTWZ7byMK19wYnjT5ScOO6786fNeRaloJwv6vGuuKi965+/rB7JVu+4iKAxPHn0YsxgcLAlEsTF62fDBlKfstV/5vZf+cDnhwIMVK/70ap3v7/MM6McNZOqwsH/tXLml+pUv6udp+EItc9UWbr7UwVEgjpZHJmNqc2eHSTUARTw6qj3F3FW5rmE4LzYQbw7sdXWIoS37FoB94HhtsVri/u7UN5Rj99xffdw1LwrxAub3zzlbP5yvaZCsqZ5h0iqh6/cY3CbkxERIi/nEg55YPvJjb9DF/AgW8vcXc5rYqfmIfOQSc7SHXIq944WvKv/Xs1+qh8musFu+zXiddy4Wn34l6yEWSmUlDcXhsbNpjqcGlwj6+qPsunQyBmV9QelkUxbMY+HPG/DQdwd+Z+Qeeffw97/yWdXK/OZF4cXXX1c+Lr//hw/ox/CQMW+jPjNmHuzg+jSgj1cVGIxs+H2zo/fZv5z+ih8ve2y/gx4kdXQ7ZXtM5/r/RRcnmtGGRY2z8i8dd2LZQS7X3vqZj+gz6+oVq2wRyMTxhVsoKFbVMLd+dOKFtM13XUj043hqKUljxK3qdqiZG1x9ASkihunS1mWid11cVzWV29YAXfrWyAvET1x9abn4luvLU3fbFy7dmgV9+nmfK3c/cF9Z23wYhBLCT6bHW9Pj2u9BnxZfmHgBuOOabcrvn/qq2cW8wj+WigN3v3yWhBOjSV2uqWOBDqpiaKM3iCV34FJoOf9c3MbgyIE3FvhirI/FYpfrxvL6o56lHxh786c+WB54eEPZios6DpqNelQzDkmeCzLBxWY+Rx2kDl/8kcuWOOLJpZYuasWN3XMRIEPSOOox1qqwe9N3rX9A30V86gn/Bm7dYkHfdPddenbeOj6ux1BSN6bNZYzjcDfjF45/bjl6vwOGZ2Ys5uvvvKP8xQWfK2dfeVm5Uz7pZ6pJO5lNlmVxEGbGN4odYUgYeKcXeFNV4i+Go8Kt5P7ru1/6unLIrnsM5wlKOhJ50L/2iGP1I71v+gf7QA/O1KwMyUdPcnkWKjdUm1nKXNpoaSNqfrPr5uZl4Nw8QUR8vW594FkgHugfv/qS8h+PfkHZY+12mjoW9Ce/cYl+1cA2et/ZFZVi4jSbdlTQLFYdODvj+u/1cjdjtGExn3fdVeWn//ovyyU33SBvu8uBGR2NKhkyddABiSHEAVcZA3ysYTKmakG6lx0mPm/AcdbJW4/pizQBSYuDJwBtzNPWctDulwf/cpvWIIv6FU98alkrT8c/88n3lTsfvL/gayO49XUyOXFtvSZiiLWx2E22Hkf9wDLO6SamY6w7SMrA4W2Wt8KsSemGBG561YPvdbnunjvKJ6/9enndoccoLxb038qXwEy2GjtxMXHrGATw4igR8TtkJxxwUDlo190nZx0s3O/Imfn1spgvu+Wmst0afiAqaSczydbVkUHlYmcTGK6RxrKYExpe0m1wy9Q/OEDRCHHYAbLDinu5/ZziChMLciAbw+gNXJ699OAjy/9Y/bryU3//P8st990T9/AjnwiG7QLWt+pg210RsTR5rSAsN4zreo5ZwweAjEIAYOAqXwnjxQw/NuOLhq4fxJmeeaWvGqb3t1d/LRa03uW4/s7vli9de5WeCRlgA4leNSDkYhUEJqAnD1x5UzKu++L2XJDdEJ0/O//ccsnNN8gnrfB46+K7boQ3uHcajPpTSfXMcVMCOwSccjqmuUJKjJ5t8wQcHvPqPoJMt+syWdOCM3rmwqJ+/oFPKu996Y/r7+nh8i421CQJqc8qVEeOny0bf7DJsbB/EW0VQ6NCauvhF6wuO4xQ9ODQTR+ymhexRN0Zeg0u9VgeoDUjHyCI3Xrl6vKlG68p35G3xbHpgj5fvuEIX89lH0AStFFV3hiDiyPRhCkwma4QGnjr9mA5O/cbBr9evhLh7/Q3yFfHozAC+wD0R3lQi+J0+hSym3WAzeGZJ7b+NkccoOTs4nXqO4xsHiL2tRXNns4zUMPrOg/IXaIN8mxXF00lYFE/a78nlPedclo5UL5EEZctkUMMLo88HKsCHnrNQk9jQ8DyEKeGRdoIdfkGHwYfJBaLPVCLETu45s+L1hDhCifjCFklgTfdd1c5/6ZrlaYL+twrL9fvmmPgbNslbWaodnz0YxUUtFoW9M7y9uVkk+LuuP/ecvO9d+knrBoh5B7l56xmseDRGcBEIoeFXekOAYDWYJtwhTOHKY6d/+AoKtapOzbIFhBeZ3z77jvK2/7xI+VueVucd4SCIAYW9TF7H1DOOPUny6HyZS7Nonainq2lDixDW1yoSZZ2LU1LNJ+6NDJKBNE3WHhQ6AMjzvY2RJ09IaAFj33NUyVUSTEhGNecriqxGqk8I8vb4TKIc2+4UrsrH5ab9Lj/vFo/HipYJ84gbZfbIba/7ECM4jUY3eFXgwmO9+rxYmhYR5Wo1qjeCE5ON2M60E/uKjiwGm4ojOMX1Yw0SS8wN/Kq6n3SxzH7q69fUH5arpW/K7db5xb1kbvvUz5w6k+VI3fbu9wnz4BNidLhs4biskOLqqIyAOqsuPoU4wNBONgEw0mLG7UZn1yk1DxAlCDLVlp9YCiLlUDNFZIQztIX3/ptXTcrb5evssWHkVbJt4CSG5kiQYNYxxM3HizEoUjDWrZTB+LUVHwEjzA4Aw8jYRE9NhCSwloSHGl8I94As7MVlSoBa9W2MOysWLvi5oEkt2uFi9+9++A3v1xO+/hfllvlBeDcoj50lz1kUf9kOWbPx8miXq9C9njJ5z7Ll0apvFxFU554e26tmUxp3SRiyXU/iAcey9ZIENDgtDJSYnyNxhV33lJuf+DesvLq22/T72fGh6gn2wBSjnLpTMPdGI1JMgOoanlk3wDe7zGQgSmOndcUGAhpU17qT0wP1COeyW5naBLrgHPwq0R5EPqUKb40axbgWIsvksgW9SeuuqS89mPvLjfefefsoj5wx13L+0/5iXKCfHfzffI1XMjFfMiEa/FJRgF6zLgVj+Un8bDVj1Eh1oO9sXzeQe7AYQRuHZ07MXG2jjO90LQfXORYIYv5vnLN3beXldfI19zql40zswTo5gHsRqt4NxXARvwRBqE5XFw6wUv4ET6/LRA4ogBr8Dy+lG3CM5+GNvGCx9Giw9o4+EkWucki3PeJT1tjrlu9dTn72svLaz52ern2zttmF/W+8rW2733paeWk/Q+NM7WOVmQ4aijCznUBI24LrA5RfbF+6tLTJ2zXUj1oCJm2dMOGhm14QBijWvAQtToqH/0V+tmOq++6o6zEdzhHLS4p/ukGTIlqoCM/kniWO5VQrvJHQZWfB1xRsUZhwCaaAvTc4DWKUx6L1LF2lXRdVRJdHOC6eSewFAQscI/wfmLZQe95NUFruSbi8Quln7/+qvKqj55erpDPTs9dfuwhX0T+Vy/+8XLK44+QMzW+IsAeZi5l16/SQR9b1AbM8cbHjnCxuNDFnHBd0U0d9rWVXZ0/86Aae2azGoCaJ3OtLvXJDlkvuOXasvKr8jdN8GcgNmljlkWCGy6HNg5UasMXXt9H6AhbCocvb008OvLjTaapPcKB9VvDc0KDpYBRfHKrORfb8KoQfsPoopuuk0X9rnLprTfMLuqd1q4rp7/4tfo9crz8aCRTB+o4YtOjJp6aukYMMJ4LqaGUJrwG8YFAbghXikLUQGeVfATva7ffUFbiD/TE9TMYXVA8JHtHVlN5j+3j4RthjFmkHcXPYT2Ofo8h5wTzQ9bMopMmXI9vuNQkyCC2SJq2EQxMfqgQNQaQ4mdMUPFpyUtuu7G8Uhb1xbK4587U+PLx/37Sq8tphx2rlx+I1TMr2vSjdUhdKK8pRTGgjsOUH3AMhUc2x9xUiGflRi8TJCg0YMhP9MlLANbwlfJbPCvx16ZGN+Y1a+wQmVNnO0gtJcHVZAVsq2dogbYQdSFSTTGhCwAMpwb1+fgUq2G0eAbpa7NDoALiMo3gMthbY3XgpJvqmPgGgIuiwQd3vnXHLeXVck2NX9uaW9Rr5dr7D+Xrtn72ycfLfWq7+4GsuT6vQhNymZGTfbAnd1xFiBxoqu3iFXdAuYYGV7O2GoDA4g/6qOtW3OXAV3ypnGvCGZtiDEuE0VGCO1FaDTqs2CEvAmZ06I881PSWXfLQLoppTCZn2wSBEPVRmAO4PxDs5RC8vpwlYMJF1AinOPy+5QcIsbkW4ZRgTnyZ5nXyQulHPv7u8hl5wThc1PI+BN65/X+e+2/Lm496rv5OZ31ZZ6KoA9rQNZ/0PBlx9BVy3LgS4JvDMXb2TVl0HUCf9UOQOHW0DS566MiP/MeH/lfib18opkzf+QGqkCsASKb60e8xdWQcJQpp9EAgd7k2YpnMhz2Xn7SsO8LgH+EdpgcIWIcj3D6A3zsHRIHmDlC9+2Fx9cDG4UWq8ea6ZOpUARM2Pq134313l9f93XvKJ6+6dGZRy2/XS9D/fcKp5Zflq2zX480tieaUc4HzmZxjyPlQNftobRS1XPqIY7yMgR7xiBhgquHEypfq/F1JrOXpq8FgwuCPSNGMjO7OfdrBDYOeWjlcMxsH37oxwQyiLvstczo74g8qDddQzZTR4U4xxScPuZSEC3rESe37Qxw1gGjj5KIZJ6bAtEV6e9rHgoEePsCzqtwm92lP+/u/Kh+5/J9mFzUWw395xovL/3ncC+U3X/CHfrDssGFvZ04cA+u5unQ4e4rLDq0uUhiyKW6m91mZtM5PbsWyJnyqITtWZPUw3msTVl3QiNCNhkuqEn2pJS1Bk8o5VK2aJeaAsa3SiOk2niliCqcUG3kX13Y5LmlH8S3ZesvyQMjjy/ZIcA5DTe1T7rI1drVhMSMGDatAi0V9l1xevv6s95X3ydvl48sPi/jlY19QfvP4l2iRuqihp2dBhUIZixYRXQkDwEj2IE1sNetRVfXkRp9jqEkM0bzKZYAgYtYFrQyV9B2J6GY7c+Zs8D0mQsOYC5rHI5Sa0gbmYej3GFxDvAc9cC7eU7DR80s84BhkZwvjEJP01WS4tiOcZ7+GuJEdexarSXUReXcruT2LDyi96ewPlNO/9kVd1DqWlEMvn+RR8eanPq+8/dkv11u6+HxNw0PxrlkziYh3RktphFnapJzEaCKVPRBadj9/VKkLenTkRx80gi6zWQ5mSg57tMwfzRzY2ipNfbQBOEhfGzbuNVx05CcdjPT4X2JMVZpydYKB+JOgmDhoscHVY4AGuB4McSC+0Wg6oTw0dCFrvhQkfU8XMfhAE/5Qz1s+86Hyx18+B7+cJzWBVTdd1LKIX3/k8eUdz/1hfdGI62rdNEeYEYQ5Yf2hBkM7GKF1+HY2Aptzswel6mMhw1VxsXSuDAkNj19pB1h6ung9DE4lOAvZuQ0guiytE/S5j56kS2imdWbyQm+KJoLX2iAd5hqTB6jX6k1W6I6xT4cQg8uagNE2haBkQdjq6L1YyPXKkCFDKp19K2TTQJTrS+NWzB6qxMLD595hv02+/PDtF3xaiINFDa4s4tc+6Zjy33/wVWVbecMmFjV8/iONJmIudDkbtUV11sPCrrF+eZWCwxQjbIjKprPkoD1AgFYidOUMTXkwewkEpG3kjjAaVngrNQpMugOzjZAe5TN3hMHfBluErtCBYwAhwEdhsd63uxlTb7McRa+ewSM8auKBTR7x+YHN4ExdmZJtWyh2LPlg5JEFrx8P3ojAnY3/4wufKL/+xb9Xqf5MrXGyqH/4kKPKu57/I/Jb+mvsTx0r23ZZFyVr2ZiDxDFTxtiNidyeOo01Xf46VuZzrMT8kiNlSiZJ2o7wwGB4GcigeDi9GldLcKPfdWzwC5Jz7CQEwGiKBJ5wHetxjklnj05pYbIr5uzWcLwjDS8T+jikyRXXB1LL1LOUywXfYx2uJQoQw3AZ5MdHL3/z/LPKf/z8x+yuho6xzYMz9Uvkcx//46TXld3Wbqt/V1D1sWMihiAPikHr2Wud9nCOMOW0Y4VMO35ne10xTubz1lOmF4Wq1LGIQTNvURFBTxO8MHRgZG1Si9lJcqrR9yk8xAfx4I+4wHwolLQWYA4QO3dJHmH0DVo7vCkh4uWHCI4hrnfvke+fmGxySbfjmrVyKbBG+BEh4VYEEdUTCCgw/jhNP/aAX8T9vYvO1q+qxbe+2l82azNiUZ8on9B77wt/zH5PEbyW4nNiyawOr8LzgzCJcQ1lwukE8jA2V1FnKCQuJJQvOzlD11A4NnnTR1BNrTqUbkSHYMNoOzP8Hu77FNG6OmfXVapjfiKwaGABYGzyI1hAxqrc3Iet8T3oGu6MA9TTtL9Cv/fvWnm3r99w1t5evqjnWPnAPr6BysvXg08bMTwiaDNOPeDyQqrgq2r/6CvnljfLi0W8BT63qJ+1z0HlfS/88eHvKUKTC9CWoWRMSWGyHuC0gZNGDFqYaDyLYL5bXL26a3BB6l2O0VFilhpfM0cJ4lySl4KVJyWM+IkWhJ6HfsLCDIMiAmA8Gz2mNHGhySmrS49IZAsukfm2p0IL2KRUAYHjHTv8VvNow8HG38jeTs7SeJeMGlGfa6i+CBAHjxh0sfigtY28Vf4Xl36xvOHsM+Rt5CV+T1G+IPGMF51WnrjTHvLxU/mNchGDtulTuV4zMy9yKReUvDFEMJj1NUlVpboScixtCQQbD05ToQPtCMt+tREuRJ1FBGBja73xfhHOIHIQphM1wGPwKqMsExxyx7mMin0NmvwNP4SKu7mhw4ga5ogAMld8bRBVIR4/0JKNYWiB45uTPn3NZeUu/M6gzrXSdIfLgOPlt09+7fiTNR73mON624Wgyx8NEhw34BpM+1YBPqn33ssuLD911v/UX1gevgEjeY/cde/ygRefVp6y6z7xe4qWEssRDxDNFjtVF6yDJy8ULUDYzboCOgh2OIvWM7QpTTNmXKvBri+LJG9HbmJsu5CmO8OZwENAQJ0MO0BR64QrGYGNcIEZbXXNkAizhZzYtmgtcron2TKwl3mq4QBetF0q3wH9sW9dYuKZKDYW9S889TnlvSf/WHnGXgfoX1xAPHTzDzrEedDt6dyf1oWAf7j7sa38tbMPX/mV8hOfem+5UX4D3+azTYy8h8gZGmfqY/fA7yniuz9MA3yMDvmxaR2y45yiTz9tJRrT5tAAj65a1FC3BCMeG/H45iSDZ/aMym7MTpTljhEPrjncw4bNIIZFT/mJnMzgjbBwdkZwYUhGHWfHQTd4A59CHj/HFd2RBMbY41iAvyv3i18kXx6zs9xlwGLKG/qnPuHJ5cUHHFa+JZ8J1q81EJGstZwNPzbmRh/fcKVfJEanMuoOeQ+Q7/x4v1xTv+6svyqfv/Gq6ZevO50SaJFD8zBZlUwOY5IfhWVuZ0OuLuiROAImuKSIg5ycyWzyzOENqe9gGL6N4ieY86MuxE5IVLR25A6MBluExNS2Orkn9Fo5a8oEt122cpfAhbuVfGLuq/LbJ//pcx8rf3jiK2X65QzYXedgceFuxRN32XOQ8FFAkqfPldWQd5/tdirvOem15eWf+Ity6R3yXYTybUYxc25En8EJCDMMHD3r6L7BXSBhQMizZ5/OyZzBUkNIWDC6aLpDsWR8qFVjjh8MJ4x4DYaO/ERdEEi1uTtkwe4wdLHZ9ak57QkToLp8J1PssdomF/EcoKHVUdmu2UlHaIN7AXjRhhdsp1/ypfIbX/wkip39cBEW2Gb96R44dSDVQr79ZFH/gXyt7bar1+gLWc4djkY6Ihbkg6wv/gTWubJ7I6EMXnAdTRiQ0NZ4vih0btO4kGEsK8IrteFVmIUY4qQ5bgpTc47X4HgMs64sMM0VYWJMRoCJULxqKSeC0gg8uNEALwAz+OKtk9A83bvkdsAkjFxKqYaQ7UwFL94EWVV+67yzyi/941/L1wvbF8swV56Bfw4bi/r4vR9ffly+BfQBXE/LQPBaguPSmmwYXh46GC1JZhsqNoyFthoPBb4+SKEkEAINW86QbfMuvWeB1F4+3h9wVXYQsnm/ay4lkOSppzXonYge9Orqi0Aj4KSW/4Ck0jyWXM4qfezncdtDFh7zYvHiE3N/9E/nlJd8+E/lheJXy3rcgxZMf+QzGuA8Fv986JPm5w4/vuy6zbblofoo17nk+HIAH7S2turk5gcp49RbKSGT3w6Hu15DkxKnkBQdZhjt+o5YMVBBoqkr+iyPAfNtw4x48gEMEk14zh/hgYUhdVc78leIya0FHiS6cLsqLlicJyRZxaRTTqv3TpbBg8E0lCEaQrL/qocHCr6u4KKbv11e84n3lOP22r+87KAjywnyhse+8rS/g9yTxq2+Lb3hgZXrRj6cpQ/ZaffyzL0OLB+95hJ5s6YuL0ytPd9wXGxtvnwqouzqFSg5iStxgsuzWCjASAQ7WgIE1kg1YU0n+BkFyHi0j3KjnMpQVzrJjAzDesKbDAazTa45M7S9IF3MiMfmC5tdA7XEDnKPNyLFK0lVlZ2rV54A/CLzz3/n6nLu9VeWdXKrDZ+z2FF+k1v/8i+CZKtnebf1hOVO9SstLg9YW86ptuyI4VtPX3/Y08ubnnzC5I4LTgrP2fug8jfync2xIVC2+lBnFuLW4tnLqdHCA3aPVy48fmkmpr0czREa6gmpAtWQbE11de7AGjyJJbPh9p0hz0E85HVjvw+WPinJpQd48CxUz6w1iCna6RdZoWQMX2m7/pGH5MsTV8lCa6/i9Okzk1mWp8FnJ/ABepxVuUhJzy3ouc8hrZE7G/IbgfpFhfiO5OvvuVP6YHoEB8EAtp6fXW2XxKrzQfkbLu+7/KLys3J5gT+vxrqodciOu+tnqLWKGuZuASaYuYbwiN5gzG5jli9hFjFVwg4dB+KgWzLdKy/1YY6wBqeutDQ7idzVBaBAFnZbmyi4hmVqRYeWfSMPAqDjJUnXegrZboBxIWcuvkz8SfJFiK+UPwVx3F4HyB8Plb84QMICdd0jvxaFt7bPuOwi/SOa+geCOKkeTzktTDDAGVOa7FbLSyK7RjcGL13sLC1xSkxjpCk49YISBnx+ySRrAtZK+aWAG+U7me+QF6a74W+byNvuedtZPjSFZwne7oM25fgLreDjgafKnp8catWzsNWn/oabLlc8ON0wTGkZqcqOewCTLdZufJBOwiQsT3dyJjPqEQyPRTuwgZqhfAZZW89miQsN6TIrPH0fGD4UdNoRx5Vff/YpZbd19kdrgG/sdpK8YfKz8pmM/3Tux8p7Lj1Pz2559UVurwv6wLBpjexIP8y0esEBbtfndVzKlV0eZ3AlgsultrT877HLs9Jow7ubmk8TGEOXrvQNYpYAHCdXeNVVU1iwc72D6n2sUPVraDIFAtrIuw84NUDB1vcbLDvFZpetCgx29LNloPa7Irou1drFjEAharzbjaY6GBp1Qpob5iv3gePM/MOHPKX8wUmv1EsFvCB6NBseEH/w/FeUu+Wjoh+U38zGfWdu+UwFLIYtdeXqgasvgXZuFTxx4Q6u2OxrKzvTt724pS+gn53B0U3J7Aza8HsFEm+KcJgKH3M1k7kYaizTbrnukSbG56p+wQdJbMowk3vE8ocYWmD9NsLAmcP7+EnfA0fxwHq870NvjjfH7WsY8PCF7LvIC7D//MwXb5bFjJR4QOA6+j8/40X6x9n1S9/7WryPknDEeNQqTTyDemcx4VJDw5rwKpQXU80lVqU08KSzKG8S6EAT750Gqzx/p1C8QQgjYV2mRAlPg3kHTYPXxBE3Y1gYp5ukpEuILVw9XX0EWQhbBno7gh2jAiPwQu7pcr186K57Tl/lk7QJLRb1ofLW9dPlz0jgcxSYO55ZUQN/dE7Fh/Ka2hQD6jhM+QHHUHhkazoG8Vmt0Wu4PBcaf+F95EJ8dJoaAg3D3ejLDy6VuOlFT+JV3CzciXcsRZE1akkf+QJbUCv4U0MVUJvmS3qD/DGE3qcOA+3qT+R6jqSONNMypojE4zPK+Eb8LbUdKvdycYbmgcToc9lpNgQ3DzG2qA127gMDnVhoulFxBzou/aqzETu72PAASHf51DPCnIjjE7m7A1hx0/cLtYANdXHr+H6EwRV4GBbQdRUE1qUy8nJ7F+s0KddL8tV9TSbLGa8UZZtwBxh4zSQCkA2Lh/G4XbalNtzpwMZjh5zMi/m2RcxlIh4ncnqUqzyL4zypJnaykQsDfOPw4SGYAMAMd750og6IbOwGsdGWcDV1PMjEbE5IvJDpML+GBtp5ImLGQFINyXFSALoZYjixvqWfLcfAPlvGsS+tPk2OcD21wZGcfE5N8XCPYMUj1jR0MfuDIktsCVunwEvP01EXuKH1FidGygUutsQinLFoXS7Kpa/i9nCFytycVG7IzBhgyk8E4ITSUZ1SOdXP231JQExWXHlqJRhmfSkNb59UI+Z2dg/R9BjItotp4KbTEaULN48IvHP0ET7EBuAAQqo2F0ZmRDvjt4Q0j3BssQ0VYDGwZO17TyvkKhdMObJj5ewD6DVywfW8LJYGZa/k7jXhHhEjTBJCB4XIRirrUhAUz9XggtlDC20lscbgeqw3kUfO0KAssSEiRyVqPSe4xog3wpJGbxp9gZr6wKYPlayR7Ya4TEfiRIrjzEPJ9jIim+5GbvlhLo5CF5icsYhzrOCCU3FPPQGMBH7D1j5Hu0TsNIOT2UDIqrUcxJduW24dCcedo0cY/PaiEPl1MDlkBgMluG5ghgNzDfR7zF2zuPitUA8cxY8w6PLhHuL5bFODgsZa2FYKEZHkecGcWpvz5iY0gjeDkV8UTiczFZzmP6ERglp73LD6mqASOOY2KOJhRGepQRopU9XGjj8eTlzbwKTnQItbfMY8RJvpR6YAg91HEFOcnQEP8XNbrznHm8O7+OjGKgXiZy4xm0UHV48BEizCPa8eUgERnzWCB63HYNPaNE9NmD+WqrX5mGBXltQ9wkFQEkZobP34pZnNWCmWxz89gy42CY1GCgncazIXOuEJdiBeKx1aEzDH7T1Keodtp6CRIT+MoHjjpIy27DSMJTuxmJxlMrIPKdYEjLaRg9JncEfPxpNuH9P3e6nN2kcy+UEVqA1drUkmwVxWn+E1c4xDHMYzH/HaQo299oGrqARXr+u7Zs2GDDMbXWyFRt0ECSq9BrBOLNJevuGas4f8LkcfmftSSh/FQnoc/R6D1AjLKQZ2v4A5waSiX18Nt95+ObZnFipY20a6T5JPcBlDxvr6WtXN02MVuvh8DlEDFzrnFS5Oca4RVSguux7H01I/L+QiLm+T2Oycs1mQ+GGO5ovjq9WbGJ89svQoPgadiO2C1szJC7NRSlV2tNnuMARTNHSYjLhiEkHrqahJ8ewk1lUCSr81mHVUkrrBtyoARz3u6/sRslkNvzSQ/DzIqFYr9prUzjl7QPr6hIXWJi20MCqMAyEaphwbq/Zdtx2/ezIh5+9t8JzbzFmDu6fBmLzGA1Fm4jnLGim0LmhP2hJyzwmYnZ7b9xk2h6tAMzxGtC3ihzSAWVzs3KXKCJvx2VkPuimhL3AiWS7blNzsrSTBWZSLWetAYk/ujaVNeNShBNnpf3R8JAapEFDqweQ2n4uzQeYybaJrLtA7I7pJKmNJooYmrpkWYdfQOXpCBJAJ2U7kHu77idrIZXxgY03FBjsADNOGGlAQwcsdtzV+ivu61SAuninLs3kNeZJH3M2B8ZKqz4V+M7zUSaaWUK+WPSoRYKq2u9R2bc4pMRXTiZKopKH47M64rQbIJhDX8fUA8CFnip4HTWg4ZoR8TIzRvrFCVgRRStrASJK2w8jucSUGl6UFkASzpPnJrpqBKIQzWEVMCvPTY02S1LHruHo1hzhk7q8vAeLJaVHdlGLTTRkIasFmZ2qzuddaSBCQJmu3vu3JRQ82uTCaPsTDaSaevWyGVAWMxbakowFN3zsNllJ3+DQeSE96JF1yaITtbBoTOZlBG2CctOCEMZqIEZYWTL5TIbksHfZMLFOMlTvYeP+WLmVNqAJI/OQBITAXBOOREuETPAhbwEBCWWoxS26gURdaGqDKRi5gc2FvF1NDrriNh2jbxmMUZRXo2Yxavm11USk0WXEbP0L7+hlhv/VdI9oztEalSdSo+UHAU6WkM6E6oA2YE4JmmOyEVs9N5m3yzOkM5DGkHAsKDnHdKmJnoikf3KyBflZAf0tsMQeSjPm0xc4LIh75AzBDNcQEnS5tE4Z+9lfbIrBoWgy9ZTaKCo2LkfPLSFNvc6NIhqqfJA+KOijqo0KFGGtd0BoYdOass1CRsOaHlapIZgQuYIR2xMMQNAbSiQSvw7uuLuYJ187UE9gy+pS1QlFfC2/enheEXH1tPOM1uHSMm9Bk5uJYP7WVNuKGg0xXGXFTgnCHAadnfZTHcLQG+MC1BT1JKkCDjSpdChsVngSTmVQaUynBo8EW1G6Cm2jvCN0rqV59mss64vLulGthDT7SrOqb3ZqM0mvtRqBjsDqTZ2QuEc/iIywMyDcdUmfbmLM0AFXwxcwzKgQMb6UyliRkLcOTEY/TgMk3JwF1T6tvvZGrwTxeGzpiaEtKj9JZAKbSNSipZMGZrsElyvGsaVjvEF2BejQD8NXNeqqlpOrZrJYX1Bw2wXBWBuazIa0ADbcuO3JRl8aAR9vMug+fG/DoILvLT89VAxewJMbqbYPTUbUxZKmWqkNUDZt4FFfZHdd/Y2WeoJFdUKilMCSJhZcT0iaXbYi0Bg+JTULad3HaNXcc4KjV8VAGWbBOQgDJJjjoEdJxieuZQcgTjUiyZQ280EVu/mg2v7btq8JiJi/qF4N4VEqSickebA92GxRd1jA2dtMYD0TTa4wwofUv6qeBtZCeK5ccPogYSCWr1RdB9wCfu+swGQg1Bi3PCfFgBAcLTxoeHEA4OHNb9XmUABXzKI+f4HCLj7lQByfNHrLmaeqbK+RR4l69qXi96ERtje2nE+Elqs1bBiQGXWh0sEzz2GO4BGzMRimJmYsfXf2hqL4upB3O94Ar7xSOwpepfBICgNOcYgEPuYkzMS3Al03Eh/pQ0/M0udCRcxdmIuH8cj9CaNWWXUdVXM+M4sADLWpSZdlt0c0q1JpQW8rFOlEPHmR8ZjQ8ZioiEGvcgHSslUkG/FSrXFiV63guqKVqL9xhJA1g/GFs3w9cHPDZThqvRDGSvBVMFvTShC5k3G3E09CTOQ6corl2G8MmiGigxOlCtBwskdedWZU2WtpRmQQSy7VRL3hbwvAkzF9TyKITnz1v1fpgxeUHYvlTA81yXW8EazMQ12evCbcXG/dZB08DYFF3HNFXQVauDbaojIQck29OGnlnsg+pDoYO+ywotXB5TQltTE5ATZUsN/MQEYzUPQYQdOLaCpAxxPKSAzg28tVu+OnMFWPVkC26Qz2sTRNph8vFUutIFecSn5bk7s7hyt40TsFGsIFDTxPOmZxUNAp1rHFpp0FEv+93KaUrH/DPh9AJo7gGQ0d+cGD5FJC1G252IIz5xiROAFkRLXRgGdd15XjwkMJztFzrZUyH4EDG82UKlg4q1R/ZoUUVma/Q5t5JIuSwfG54x5YzztLCAKbcWhEepOyh5Q9B+nQccTy0J2zZPI916p4P/oosY7lO5Ot08zNAoxQnjIiU0sXu4jUGWML9LkeSE2fym2MCIBGTVScXWFJTMWUEzY00kZkfSyX44hU7d8FHnxWgbxuIPdMgLkwyKZg11JZw1IBlnB9cXCTkT7OE8qM3kjjzscXI+VxRLaQkCst+ciH9sdEHhYA2RqpLZMrNePWOXaRM2+44MEMmtqnYwzjARp+YWJ2e6lR3yHbvFBreJJ8EOaANE3tc240k40f2RLhZoepNlL6mpq+ZhOx8O4NZMZgHcrUFRwx8Nx0+zYZvycS34OOrbPEl3hSxaFHyibR+DOkxMbRUrx92rU16ckLgclwv37iEr/RdLWN4SGyUvLV8twdi8NPOvy1hxJtC1eWaacaKVNBwLbBtAzq/Ze9ENztFwuqQDE6sDzIhdtzIOIPXBR3MZEyCHJjgErMoBnnlYopmNhnYrHeUBzITfAJoMizih+Tn5AMPLz908JHyPXLblsvk7wC+9+sXlEtuu1G/dd5yywF3iZHSbH0zQ9okWBIjt+WqVeQF8qA8MA/bec/yo4c8reAbl25/4N7y4au+Wj557TfKKnmA4u8OUiMUwoBydBYvESGLhi3A06PNQS1ThVY8pyn4/IKeBAHoJ8BJE65X1dObYueCGtIyHa+pk3JUJx0lYAOGhYx//+X4F5dfOuYH5WDX32/4scOOLW/89Bnlo9/6mvzJB/mOZ4mgLDUAwF5yWOLffBuffpMiixLoPvmb3KcecHj5o2e/ouyxbvsgvU7+cM/bv/yZ8msX/L1iXNTaifg6vhZPazW4HbbAF63anCUBSaI9h6Zz2CNCHHBn172Ljz/g70I6UKriMEJNfVZuPxHGN5ryGh2MqAcYMW2HzAmImvC/deiZ1SF68Eds8J10v/6sl5a3Hvt8eTUsi0Wenvmzx7bbl7944Y/q3yu5b8ODWhBHSQ15PGimjRjGdGCLIpIUDz5sMT4WIti9G9aXlx1wRPnz571GFzPHgRZje+tRP1h+/diT9UFs32QqwV44dV3cBiUdjjfwCeYFaNOwNWRuF8xUP0zFYWhd5ozaOu6cth2Q6o1TVMSHQZKX0xxFJ3Vc7couBuAS9a6BeEiifNdSkk/3dDfpAQrRDjQjnAk8FQDTvvjwkfIbspjfcvTzpECZNqzOtGEh7CjfPP/nL/yR8rInHClnP1vUpCALarAoeTB0acnbvC1GaImYD/nvldpeduCRsphfrTWj9rzp2GR8b/mB5+qixgP5Yfk32ebGkHA1MXA12jmb6PVA0uld1gehJXG8DZ8UtnSin89eMs5Y0FpqHxCBA8cA4qQzTFvh2eJBwCCoIXPBdCA0ItY0MPDJFzC6POtAF4sZBzQW88PTxcxsWBg7YFG/QBa1/GUpPVMjN4Rcm9yuS3iztnbBIfV6Mhwj1PSyA2wxo9Z+MbMAnXMZ6y/Kov6NY062eYg/HSGC/QDQ5w9FvK0P/j6oI+ZuouqJIPWNJkdQzzzdg0R4HG/IgTKJd29oGCEWdA2AI/3oqTElpSuyUbgHXAaw5RoQ5iF9pDa5pAatBXo41NiqMFy1ZzYuM/APi/nNODNjMcu/pbZ+UeOpHbqMyjmW0tk8Phx0nQmVuw+XGXpmfo0+8OYWM3PrWOVB+mY/U+M1BH44jRyT8qXDsTW4gKjBTiggAZAIijBZ11KLouiHLjVMyCJVs5ohl3DFmDcSAGUn/9Z3KMDw0ZHX+AadZXkgxHAkf7IHcqhvyJCDYbWbN9I6nzHAcVbGmQXXzHqZscBiZil1Uf9oOfXxR+r1qvqQB+L4eSw2z4Nx2WK2a+Yd1mwze2buy9I5kbG/5clyppZraixyzM0iW3umRMziA2cGtm2+jIo9JzvA9dkicBjewZoSc/CiEMkiwutgUFuW9noqKXwkhRbONuGkMdsGNTHq2cq8Oi1OzHzguDf7K8e9YKMXM9PZot5GLj9eU35ILz/W49JbR6N5SXwMWlzP/9Djjyh/JtfMG7OYWZqdqW1R/+pRJ8rc2B/70TnDjj8eQFzbwKSXAYov0+YQPf62Sw+pzEhiCc7zXddQz7WA9N12AOQHEeaTfpIKrBeq/aA0hl/9CqZq4atx2Yon2MRTTOpCfKooPUASLnEb5K8zPXm3vcsvPu254sDhzFE529I2FjVeKP7ZSa+Ra+oj9DYZIlJpSws8Gq8kQdX3yq05XDP/2XPHLwAXTaFzIHPxliOfU568896xqHN8zJIO0EZpWHgyfd7mBHmrKyBWomnBFW/dJyX1Mt5x40oncDfQdM/2doYW5nS5QC0Fopu3EDdQu/FgQI+TIHaXNMvM2YxGDTgYXbqmHz6kEkGcnfF3StZtvcZfkM5lWR6Py4+T5IWinCVxTb3lNxuRvQA8XO9mLPUCcNF68HS9Tv508tN331/+UKjc9YiJo4JPILtC0JUB3oQbpLGR+HVttUJ6ouqiY91nXMKSnHmC2HriRaF+OD9ISa3lJ0drYgHWV8PJJ/HT5Zj8nVkXcnJIXQ2OmlTXONlHe3V60yQpbZLZLGq5/Hhwiy/qRzTHxrwA3JiB6Z9OHgR0sxyM0cIL54zRLBvtNMhghYpQRxlLC2kJnr9TiGUwYA2gEc2e+7OG26P4cZUtKnEItVfXyaVnepteLlx6+VgEjj/8eOFN15UN8rZw/oum5G5KG4v6+a+Rs/SDcvmxYVNkFoq5X7RfciBeAOKaef7W3EJiiYT5xJxceOt1Okf5iOXjGng6fhMs+VKKqckDIx57pvWD2zPn9DQe2X3zNcButB5vZ+iR2ByWtENMz585QOzcJZEYW+KDFmksVU5ogURCRozKlz/sLh84Ov/Ga8u7vvolPCoG6psGcVGfftKPlhc+7omSlJVsmt4wSjRfuN8Ty+k/+CObdTFrLpmLd112Xrnglut0jmJmOiO6qcARltwTc/SsrKeikdAIg6LinGN0+DNJF8D4A/6jBMTYQiLbvvwAYg2xjMjUcAOdNeo6nA/UHO5GEzmlg79H/b+f+1FZFGvKq5909MK3uWYLcgcW9e7y961POuCJm00z58Rl20n724MFuTbXtkKetd53xUXlV87/uD7z6bT53NmBxPnTl2GdfJ3ThrZwQXI0IhBHRjrRTyIdpszAaMSRTYHJJE2guIYOd3JuLKahsuvTN5JNJzIsaei1XR8n/QxFTsXlBrtcQ+OTaG/69Jnl/fJJOhzQzbVh0W3OxdbXBe3h65GeuGAfY3//5ReWn//cB+UPem4oq7oFazKYTUxentU0xy28fOakow+TQXwcs6SmYXEDHAz8YAVI22ug32GP8ihnRSTt1FGoQFEf+iOO4u0uBqvxna50gbS6Jq24V7J6lSxquef6prPPLGd848LNuqjbar93e1jMZ8iZ+U2f/5DOxSp5oOvc+oKzmQXCn+lY4liEy6Kiu4yR1nZlisQQF4Z9pAE5PI9y3aZC1yVcPz46IowwRE5wB3q8749CWclMC4k8oZTMGEJtcuitYniBiEX9xk9/QD/P8JrNePlRs3xvWnqZgTPz5/9a54B3fmyu9Jwnh7LOGRcY5jZQMWAHFo6lxxx3TEb8EQY5xxs3i8rpGoI7gEmR8y8Ks0C2Q8wV0PBnyMug26Ex8AESv0oOeJOzstFDiBOPwwUbG85KWNQ/L2fq939j815+WIbvvX1cZuiZWe728DbmZE5llnSyB2OYcAecWWgazOMxDGno6MywG16nJL7xJQeC+sAGo5MthGcKyDmFvgBLI8DjT0h4ukYDmOsS10Uvj2y4iOGA8vLjX/ui1jPzFRfGZUazmDkhNm0ydzap9eE/PfSYf2UZFd1lN6Zhi4CsETjARtc7qKvBl0iZeP5OYSX3Z3hybXmgB8vLoVPDBTc35yhEiTst8KWMpg7XBb9NaT1UE8u3e1eSoVjkvPx409kflDP1v85rajszXyQvAO2auS5mnwlp7OhxZuwopKNqkwy3bMptqeZwv3WmezvmdlT0oHUaGj44yHYymuop0udsNM2pZ+jgieFLtSoiqeLwmDcGWVm20DzYm+qdANU1tqIim1yJJ6JS6OBH7jYY7g8xqdX+mSq4+sNg6duZWu5+6OXHv65FrYsZLwBlMeMDSG+8/KkAACTOSURBVBirvQOM+eBs+GSgSfMChvY7DF2Z5o3eLMQDR/EqnGWFJJil7wIAmqMG9H1fm/qisL0uBbMK8qWDKTmuCyezxJ4k8NyCVzVqz5FrvY2VNPD4gp4+9tVGzxDEMJdmgF8AtRPLztSyqP/xTISUVz/xaVv0Npwm2cI7W8xymfE5eQH4SL1mjmfTlB/vGI624ZtwQp1hjyQ6bDZYePClo9Uk8Q4aUrJyw00OwQfX0K6AIA3EjqpiK1YR7TuWpI03wXlGFb2Jr4nWDuY905rFHDUJVRw9FxXjhzEqCAyAbHlRn3HZv+wzNRaz3prTy4y6mG3ybLx2BNsJNUwmAxT+YHKw9X1DbULh26TNA/UYMDsw2gPRPlffZ4jisx/wJ4utJ9WgJZKTPmm9ChmIRnt3QksAePxJsJotrufqhqvz5Tk0HwUE4xkLuF1+yC09OVP/S72m5jXzm/RNE7vMwHD7Z0xO+XIv/jhVqpE7YTczGmhvWL6Wq7nVQdyr8pNMr7FQH7EqY1rTF4Xwmk/0bLFAuD5NhVPPfqOkw/oE1Mi6G4UaJhzkq5kqtaLtgyNz83QRJ8aWinGm/sy/vEUd18xya+4Bv2bWcWH+OMBoDazz544pMYIbFzp6YB1tnJGkNbqFYF0VqryRTkcJ8ogbF/h2ZCeXHP27NEoToX4hYMZ6jOOd4M7s8Sg0GaOa9cHk+XiGAQ/50Da6jkGSeOYCr0cMDwr59qQVq+yW3r+gRR2LeXCZwXFjnDZfaVJk9OHHxKRt9g5DLMyITFFjMz9DtLrUkNriGjppdDWFZ4TrAoCDP/KsGwEwNMgew0xrw+/Uui5DawxVhajcqYeMvs1MtSUeB4VnlorVSKQgrumkz5Y42cTrM47F8vLjTZ/9oFK/l18ojhYzxsl1Z2PkSNNkcBLQJjfhFkJPVZv5J3fhVmSqLi3RlWJ5TFWLrpHwyMfBeo0MswUdAWboIgBDu+HMlTFeW2hHTHgE9FB7KWiTk9SCOWf0iw7nm4wxDmeArGuZxDvAe25MqnDjlt5n5e6H9F996Pfe3Q8uZrvPXF8AxvHVSfHZ0PG7zcnCtPRQ17f5k70TY46g0XGTbGMuSZsU0ITWzkQEQK2LDzgNcO7kksMChDIRq3kaa443wSdAI7NUBxOMurAYza7tKA6ZwJtyZ2pIuvlM/f7vsbsfXMy4z/yAfGoOtWLTp3S1MGYfYzdUnQtgCef8eGg0Spksujl2hDXGmD1Gc02NyKQj8U1daTDOTQuaTrbGiF4YkyyxcGK2Om50xdAhBTDVIgIeLjXqFNhTFEIDg578ELMYIQBIOLoV055pOA9xhoLot/Tw0VO5/Djjmxd9T3xKD4v5A1dcrG+a4COgXMxaeEwIxpE6Nhzd5/ERVswd06geEWIWyTYFZ1uQEY+fWVJ1OL0CbmlsV1fHlbscbYaua0pCIYutOpoOEEmWuBbsC9C5Q30S0YIHDdXxID9I3VDiTRPgZEIi8/h0SYwtebkPDELAePfjjXih+M98puaZ+Y3+eeZmMaNkrxnl50XTjC1NUOAJg6k4DD1IdDqbXeTABrjH1GG7RqI5IokEcwmNjundFAAzBmPu+qLQ3ybq/JGQONtJISK+Qk6X4Wc1ite8Ez95g5ZcXjejHxj4os0+W2C2iHl2F4/MrsCxKVd5AanBsz25dvkhZ+r/5S8U/xmuqbmYcZkRZ2ZdwTFiqV3Gx6LTkABxTAlewhyINDOXQkfU5K7VaRV6rJJ72qdzqCvgEJegDvdLDkEx8n4DXCurXqWSby2WDG/DRIhTKM2IvogqPLAkCHr4QXw88kOsxvCgcinzgWBUoqYBjLpRrxvEoaxnarn8+HlZ1O//5mP7jmJdzPabJjwz62+z6KDqJMz+hksMrpunGuoOPCjyyAMeLo2qNmd5AjQ8MKBO8qb43sc4xdNAVDPFJbO7y+GeLDxnYzkgoTY8M1cya2EZ8MDWcyXBVMjIpAZ8GmLpdE5My+Ynn4WYhzFY1Myr1enOskXfxehiayws6lX6xkWcqeXLxbfkr2Ahb13M6VNzXpiePMCxydcydV7F4rxw4TRjaToaZruY6EQYmzbhDEWymS2FVwZBtvT0fRafxheJJ1wXcVzO0EtUxYRzrc8eFSKXGMAyrjYJbOd0gScN6pAefXDkh3LEdREnPOJIJMBWcMYSUlHlY4c3X+Tz1PKnKx6LMzUXc39rrq0RvbkBDcbjA2s1ONqMij0nG3gYFBi0WXMm+ZwMcL8EboRHfOVWlny5O5CaPB6szgmNMGpwz1UV52V6xmcnq8rGhGYNxmWs/SRd9kCs9rXO2q2ZHEN9jVs6NiM4B7pXMFx+PCCLGmfqLXX5wcWMz2bg78DwMgMF5hrVzoCPihDbGKwDDY6J8YNo4wW7YUT40JijCq63D3t/359MfM7Sk7Nv3l7JA6fj0EJasp4BO219epOJqJNgMT432gmfxHbhbYIFejrvwgtNj2E+TB5zoF7ytPU+bHIQTh5xckEyPWNjDy42cOzuh5ypz/lQOePyzXtLD4v5jLg1Jx80kr5umt+K0Dq1Ei/KGDFmHWR2wc596dpiAwg1/Nj86Tg7rjgtfoRbMUqZ7Hp+35eAYbjyBp4+Hv0BpjPW41GcOOBr5e2s1cdwcSE2fDTYTrTAnt80r8S2+Y2PfDgw8EEeZ1I829g/PWSOD/QlADH4yVvNA8t7PjD60NqZekN5I87U8kuoWIiPdstnZt7NsIVHZWT20Y2KH2ESwbqpgtZmzfTyLPTzoTEjkLlGvpzIkuUU1Suxec1YLgpXmuFdf64rQ9IjwTPQiDeaEFTS4D4wYmypx34dwCIzwWhroaFRacysQvVTDVzoXLERIgZroTp8GH+tzT0YI5xp065jdqbGLb0PPepFbYsZH85v3wHk+FIJatr5tEW7Us0p4Bw+8YyII6xNO9uz0IHAANJamgPgJDQj/ghDJYKPTy1NQO3o9XbtioAsD+kDmiwUx5GHW1zz6gU/0fkWY4Q2frBxgaFv+eyMhTp4kIMvBjiVK30CEOMmBJRjChYNLdO3vaESAK40hsqZWn/xVha1XH5s6pm6npnxVQPtNbMmi3yeHAUEJgb6jgXeYcB10wnNTh9Jiic1awYGo1l4jafpcI4akHnY0rngelD6JFZQYI5PPg/NHCTUfnuQDTcVFh+5xAA2wie6kaA1sHipoTrShz4xZYOjODyeD6Z12VibcCVjpzzZactqpSVkjtCLOBrCizP1JizqupjTmyZRVzW0POb0NmOsvEZ0ZO0iIjOdnYUYNsKcXjXmSCai3kzJduQRcIgLocfRH2HU0hbfmJWBuSB5VFZetXIobJ0ud2eWnlkFyCp9bNNX7rR+6GddnHLR7w8TtBpe6iQTNNn06jvVVhmwVLtLrIxK26QzdV3M6U0TaCbdGBmfqlBu3pzbhKROzAswxZMTOl1XpeewiB8RNLLdLULTp0yELUJu5ac901gdg54yFFnh1wm2dIyEczV/N49h+kwkYtRji1r5FB7YQgPgM4LEp/FSQ+81e3K47UxtADiKoZtiaeoDLDiGtli9hEF81qNGgKIDtl1+yC29cz+kyq8++Kmzb760i7n+2pQEuqzXpEpAB1sUYj7WmJmgpJGES7ldfDh7Q0Vkp5cFiPRt0XjQ57j5wM7pzsYOAqTGepejCURHfiQhDnRezHqA+0I8louCqTgQOwcamqYkaFMDgsZEKliMa8/yRBMhibFMLy9pcI4tD/01ND2YKqiWZkRAEySoJLPLD7mld658Sk++TgAL1+7zm4jehRHsA+LL35thmiZoeyD+0+QxHeWbGXsd64Qrs9UvRIngvEQwDMRO4o3R/xbTHM/YHsPOjKYV0Y1kxO0oKtvwfJ7gEFPf+q4LEcxeIWO2nDKDk5MxaBtumbGgoasHF2ZTENijDQfDcFagodJBFSZjBNRvVtVhGuC0QQrbI3REctAtPu0TF2jEJZxZsWjox5kav9+HM/Xd6x8spx16rP7NbVSGPyx/+je+VH75/I82n2e2cVLDagCfFrWBAQQeGEnqzDgd1tpJRWzCztdmhMHheONGsXGpkEVau4nJLh7UOoLIk2lqz4rAm5xq2ozUT9upgk9T4irswVGLgTkiIU0qLxsLENobsQ1qsLNNpyG8nso6edCz3x6SScOd/VMzY8lUWhaaOGoEFvV6uWPxi1/4cDnjWxeXp+9xgBb5xZuuLp+76SqJtEsUlZhoig4HwBxsJ1w6unYQbw/cjrdUt8mFTh3fUmHL+6jTJJiGjdxLYuaULzzvtPQpqgO9i1KabYQPMHsGsKVUnw0apbbjZzzmU8m6s4fGqE6oeP7OVNz00tINblrmjqHh1GfNRjfiId905FrOvrb2szdeWc6+4Qr1rpTLja3lg07BbJJ46b4Y44zKIUUQKiDX7KgTuMZnxDhM2niSZuAJs0gHBg8SVx42k+McujQk45wmKVl5QayeoTWgj7KkRDFo3QhIB2bFrYc+DrDh1kNc8NBZcrPlYRpyaEWWedBqx/W1H1jNYXxR0IXPxRls1QRa63RZ0WLFZLPfsGPh1TirC8VUjTWrVkkPP93GhSdJTJ/ZjMe6FE0u5aY+2OgaTgdbd4Lkm3qSu8XhgBI2Jw242a32YNeEaadBqn6O7SnwNVjqJDNLrFylb9vK9E0eUhADbkOMYUJIOtTLOLg4ENgUhwkNRWxHfgMmfzb1LKUH3hSwj3ixc5+XdcCMDcMudBCTq+ADBJj5xC9BnIIab2Lss7UEVolhYodTYizMjG7fftecMbU2xPcaI6zTs+6AaNLjy10rvVWChOIsYjqmCCAlgKkRKdLxa1gLaPTzEfEzsavkJvTKbVdvLTw7C0YADA/iQe59LLjWKwHy35ZQw24WjXpmCmqjpJd4yIcfzde6FB9yhYeNi1k1rExzqI+7gNSYjtuL0QY77ys720lnAPN5K7FaqezgJGdsoIlSOC+ZCnuCI36koSIxy2POMK7PuEx/Lv+j1Ma6W7dqTVm5y9pt5W8/103zyS7r0+4nB31dZMpOsy8O+BDH2DpVRGrOOYsLMSLcQMNsCsnOXRMpaqhjjuRRvRuXGLahlYzaHbzAFZz1eEAU1OAeD6fhAihmUcEFxh8K9v3A4YhIiXMbcL+NMHD0wFKDejPkGbhPpf2e2/cZNIeHCAgksU4GmwvorluvKysfv9Ou8rRUDx3OTHAyDDK0My5wOFrclhAxtDpfrIetCszswHFenPFHcYmXlfSFkfLbIC6j4KZ41Bmb4BZpaOMLkgw/xSd4aLZn/KoY4xtGtWCNynhGRQ1dKz6ThphGKpcaHjiKb9WW7VUJ1wbANIwGVolEDQs8BY34zpM/s1Qev+3OZeWR8jexH5I/k6th4gwdl+dB4xm3ZmUxjPDl4l2i4LOkjDU6S3YkaqBJDKGNrnbqAzSkFU/n6xSE+twd19GmayR7QNYAVZFuRZINMDnUlF2CtKSqUT3kKiHvnFKZniPOFPSIqmI5eN42LmIZTzP1Ed5RGj78g60+gJNWMgchBjWclDjwMJoyHpZH8pE77FlWHr3n/rrgSOPiU3UB7YVeXZTAeQYkF7G64MEXmzi4AIBhM7zxmmNuj1gPpobqeKdRAiY/wGw5ywOMxSue2MFjTbWFTGXKGU8K4FmUbQyo4Uocgn0LDc9lMLUEnOEyHi1PJg2GDielrbTRjBjkSbmAV12bLeOipqjaIOy7WHUMNGuAWU1Y03HNHkNYYDSkHpjaTbUFhiDbcGyettN+ZeUBO+xctt1qa7mOTgHgSJDqyI4etJhLBNu5ThlxIOFXjrehIX1sYOtiszDFltrxzgV1ldvFwoeNrdVlPdg11mxjWy2UQhtrxAmsU30M6geEOPnRbGLAbjYHrEneZAZ/gA0gyZEeFCnj8Mw8FkhRyA6SjEC5XUDXjVoXMOyk4vI93w5Ph+ZkIEi/OSjZ34biNSBubhywbqeycn9Z0Dtvs1b/5Blp0EE4ZCO3YkDrksHUkotYeLHhDGBM70ujPuBqGL7sPnFhshbC2squnhmNpQfdSd5YPegQ8OTo1niANj67f02ytcPaxTXCW8x1lOu259eMPYR+wjhum2wsleTsuCGbKIFNjIVINWoj6Eod8YH1OCZLnx3oRL+mbawBjhPsTlutLftjQWMxP2Gn3fU6moExgTk3QBezR5/ISJ9ctpEvDFOFnxxDltlLPCXQ6qIjIH01ZUeoHmSCGKZt5A5rIN252vhqrArZOR4Hc1l85c+dqZSPwrQ44zcaVcLHSiLbMTt0U3yYDA3ANdpHn9U04XrQHB6amdeRu64OTLFuLCMMsn28YxvkNeATtt217CyLWv4k9srylD32rQvag7oUenLAAa44lpCRA5MuFh5QYPzR+XIcNQDHB3VGGz4HMXn6hOBwGzgCYnU1MFyA0GkA48VYxBkKHTfCwkhSwKqIaKSOpdB9Cg1UMXdMo3pEiANuvzZbcfYQ6D+uQc+wJT055esCylZyrEab3mTg9SIIg/hRnGJRTxhG7bo5HvmO2mlv+XC//0mKE/Y9SD4RJm/PDoLqO1vpAPtBwhQjhGEcA3Em7Q/FBlnMtz9wH921FYGd1qwte8gfh3+IYhRPeRBgzw6WKS885kIY7Siw14CQbj4KmRAsiIij29sG97pGGPIFDsGluKJduTUhQhSHofEuQja7dNfQsKbxKQisrquBIywUzXhIath9zXZlx63XSpFRfbDuWH9/wVkztp6CHE0eBxTryT03VEMDJ8Fn7XqgOvQhdvSejyt7rtu+uY5WrySwVHaeYSqcQXGcsFVMuM7POAT4UCAXf1T+8u/eovF5h/P/VqtXlxft/yT9/bo8aE9nC9k7sZBRR2C1JsQTjzzgAbdGWn+RpfFWYZxVnctYpaAThpt54E62O0GJ6GFaTwtbxAjTRHBkZ7aZrGvZBbVJWEfdSILfp3GNCU9w/Mm4F+11aNlq1WqZPx5VBpTyzbtv0Y/QaqVzukpPTiUDDGPpmpyG23V7brNdOWanfVVRF/Q+2+1Yjtt7f/1mIJVMeVCuFu0COHaGeT703YfYPLy66A3lpYRc55RzvvMt0KebFPj6I55RDt95r3L/hg3qZz50mMoWMyqTfwSzmmAZVo0EVFOWtHZq5XrdWwmh2qyNQGXMcZaqQRVLRJg1TTg4TwGogZNGHrl7JcXceNt48qnhiVFiTlhLnob3Pom7Xz4We/gOe5TXH3QcBj6NEeScW67Sp/+hE5oaRmOsMRvb1fTgIw+V43Z+XNl7mx00JD5td+pBR5a/ufyrrlPPfVgwTM15YJ8Tm3OoT3bEtO+qKB2LequVq8u537myXHnHLeXxO+3W/KoSFsLe2+5Y/vzE15Sf+vT7yqW33yhnglX+qzWi1o8/J/A8UTD72goxXkknx8LxEgNuvykmO9aVOSMM8T3OPhNQI3CJWRgjEXkg4H3CvSb7bCWCIVGnAFgH62XxPGn7PcqfHfuKsve6HZrjpmHy1H/lXbeUc269Sj8mGzpw5k0X0qA2clgr+00LZy62lFP2OiwYsaBfeOCTyn477FRuuOdO/f04W8YYmz8lT2Rs3JCmPOpMZYaNRcwHBjKvEt5N991d3nnJF8pvPvMUQM2GL0I8Rt7w+btTf678xaVfLJ/+9jfLXesf8Pnx0XrTZAyskdMOXPkBqDULaOMDpVbOcQDVOBiyTWwA/ebYiEt6O1928sD8WDUmiFonGspwP2wXZOWq63EWbVzdOzchOh8DuAllrduvXlNO3PMJ5Scff2zZZ92Ok8XMHO+88rxy8wP3lLWrtsqpGk2ba3EPk7dh0x4rkhsL8oB93Nqdygv3OCRo8juw9XnjLfI3sP/ky+eWtVuhGM+WmiplbtYzwokpRxd0KKqBYnAz/GOn/Ex5mlzDj77NcwVeRYsAfPc/tF5PONALbfhiKGZoPuf0NrnUyP4sQz+w5eys0dvL5aM2W+ZDi9geJ5b92c75gG+OzXKuKNvI9TJ+RxKFPZJf8HkS+C647dpyyjmnl3vlWOGOQ2zJrNgIFO8IbjB0pAhpkOcNBz6j/L8/cGqVzQv64pu+XU764DvKevlCQntRg/O0qdnAfKI9ATGoqR14Ouso5g7h8ewHBF9G+NTd9ysfPvmnyu7bbj9c1NA2iaoB7PvbYzwDcgLCMR5tWMw333dXefnn3lMuuuM7xX6pQZjNIUPHFWKx5xXU8z1To+GYCKMafM3xWc/66XLUjvvQYZem7D1l933KyQcepgsNxXAxwx/liNEPTPuKg0WuPBikcPtnFzChIRzErJFH/QU3X1tO+9R79VJHzwAQ6DZw8UTy/Z9/xjnojgm7OGY33HdnOe28M8qFd1xfFzMIsVB45KWNxQyCrRdY2dT+Upi8FsKL05P3PLQ8JS1mhOhdDgpgAb75qc8t6+SzHbp4xKGLCW3KDT5whbCTH2vsUazjUCfHhEcUA8i1Pq61Pn395eXlH//zcs7137Jf/ZdJ8nBEfX/7HpsBPdY4RvJzzs1Xlpef+55y9s3f0suSptQ4iL5aot+wxp0hVzPrWsLl6psPetZknTTX0FT+ubPeX07/2hd1YRPji5TowxB95rWSrYdPueWze7+YfXj2oHABfO/ydvJA+tFDjy4/c/gzyhG77CXiVGfW77ffEzMgz5Zf++6N5Z1Xfqm895qLyz0PPWh3NVBcc8hSB6bETY5posTYRphqmwPXzj+5/9PKnxz1byOExnBBXyFvepx45h+W2+6/V788RRckI9iKNuSzz+5m1DHpwvXi1GYsWsEZ6xT9xB8W9k5rtinHya/+n7D348uTd9m77Ca/VbO13OqLjQEBPMbGY51/4XwkcrbZ9vNDnEcAfsRKnxLVUPxBeTPllgfuLV/57g16W+48eQF4+/r7yho5LvECMGKhx03AIS7+Hu/7lEDrJze8zb2L/GbKp571ev38RqYoLb8ozM4/uPiz5W2f/UjZRu941NwxBZ4cDTHktKtl4wMfnmQ9Vv05qeIr9B1LTCAuYFaJAN6R2kqe3moVrakSrpnlAp8kGsSDDI0oOgWNtBfFqFvFgdjWa/T9Ic9Jc1zGoJ3j4KDke/IYKjbwZ2LwVjaOCRaUfo5DXpDFQmYs2tiSUDJH7nlMAjWWx+KRcp/cSPidI19S/t1Bz4ywbAzP0CDcv2F9ecXH3lXOuuYbZe3qek8xjrdwbB6Q0V4AIg5b5hhie+LaJkd7OeP3rGXSycPC5rMVsJh0J3gFgqs3Ecw0PwItlPnINg+cuFCy1wGVWy+eyNc5lh37lduWpriSfU5UHXnkR4KxrrBRh31D0155/jpE2FqRx5IFjRyvfTqX4daqIcKg1Hp+b5IjmREXxhJaKY5mCiNktVTH/Q+vL8/f/eBy5nGvK9vkZ+wIkJRzZ2hwLr3txnLyh/+k3HrfPXHpgUmLA6BCMtF+zWxLwRZAnuCYXI9FiY1G1GzLSZeVYyMu9UIj4rUg1dbbjto1tu47Htwj3LCceaRr2JzGcGEAnHnQVTW3BrW2miRItXklU4hu9tkGDgMj9U01dORExgsS3tBgbA2plpB6HpwjbITHmKwmPEPsJpcanzj+J/XdypqntZq7HK2rlMN22bP87rN/SOZLLgNk8MzBmnQ6tG47e2AhwqdnQJJclFOnfsHULTtwbTNDFfQBwouXKRdMTj1qorYxRUExoq5rTeKKiGCMJxu12Dh5pkag/djocr5WA7FOVRO70IUoZILgHsWAp22EJbeZjB+QB1CkDZ0UrwNG3wPRLKQRYh7ggTpW1+8puQ97LlfMXF17vy2XGnjrfaltyQWNwFccclR52zEn6l9/aku0hTMRlwL7udDxCch4+tHaIjFE/e6sy7lmYBwQtTNA2qyDhGnbyIw6wPiTwxtudnS2LpgOg+Ci8QhtuE2nFV7C1RKp2R+VCcuAkS6wHo9+GEvHj9Kl+cJpBX/Z4G2HPLe8cp8nj9gNtuyCBvtXjnlB+YnDjyv3ynU1h28DsaJtIcpeuuFnmjSuZAaX50HQOQ6/SjQFBMkPmtB2zAjmUxu4bzybarfBg0BqpQgP1+rc9HnHY5s6QUia0Q0uFYSmg0qidA24qtnj6Dtmod6BboNTuGvBGfECoyE1LstN2gxL0DAP/ItyNT/J1uJF4Gn7H11+5ZDn5Uyz9kILGt97/PbnvLy8+pCnxqJGuvYw8bLDc2lxxiFPz7oJx6KLhSd4XjSMgRpthGJjvzmL+6OBPiV6rhyjk0shJfnO49GYhhiOgYE6QzvFK4Z+wmDaL0YQZOu8rjuqSSkpfySAI8VLr2493vRTR03sEtbYLtlTACvGOBKkJeSh0YzwCQaAIGbUZhr3m1+175PL2488RT8wF5pLGAstaMSvk3dm/vjEV+qivk8SYfGhhDigYrMk8Hmmy6XiBRHLjYUMrgdy0WiM7CoORdlczOk1nwI2CeYTmySL7LuOQlOIKR4dra2LR4Curw7vulXXyql9tzgvjWPEhbDizIAx0W6irdO7+r6JjQcBhQl/qRxdwXOxI7zBvINGXyyroZVyMf/xU14uX/FV77INqmqgJe9yNEzv3CeXHf/bZ/+6nP71L9lNdfmwPobHOvNQ8/wrR0j0c0HrC8g+kYtl3UgQXCfFRDTsWhD4oHbuXib6ILt0xZLV+/o+qIoNHANoNpdOXp0tHUCeUOYZjWuUh/w+4ZJcBKUN3CafB2+sRpLs5wqnvAfkmhmXGf9NzsyTj6Hm2IG90QsaGri5/pvn/UP5nYvOljMxPvVk34XMcfWLNA6LEsiSuXGzIl6hAM28CWzcfA4X0APt2SKpDOIrN8KahRcaSSZqSJhXmEQCMeNRLTokkqyLLGZkW6guJ8UD38rU/Sh+TjfwPoj1LqOrYdhhVtMWY12hv4eI7tsOfm751UOfJ2+qLXwBEYKbtKAZfcblF5f/cO7f6CfltpE3X3gsYyGQKI5YMMTQ6iUIz9XoZ2eyHaeuvWisE0nt/EAiN1R6DekbhD0U0Jc6pSZWRI2sm/XoDwyGipqy6Yoauw2R3AqqXsP1zmgxIqzhuk6PaXIoY4PTq+55dKPttxEXWop3szDkiuAIj4mxT8/ttWb78l+POFmum3+gr2Dh/qNa0MhyyW036KI+67rL9Fel8Khqap/rNLgIpX5MkWBh65BAEiQmQkHbpfiENrqBN1zXRAEN7uyNwgbkAaTKIzzGhVFjE9KQZ97JfsgF2M6ixg25E8UufwpKZkQthAlJeVYTnu3xlvpJexxcfvuIl5TDl7nPHLlmjEe9oKGLD+r/6dc+V94ulyDfufcu/RghfhEWmx0aO+e1Z796JuRB42HUQNnx+ObDoXcP4gC5RprIlluPR+DCDVsTe2+kkTAdi/Q7yLS0UOhgM4Y+a3AA5rB9LyDo9BnASaMz8yAewjqK3jeoS4uY8BRtdw0HHR9fjMnnDVEN12VGWHDtGRu35PaW39j+9wc/p/zsgcfpazKP3uRmsyxoZr/sjpvL78qiPvOKL8vtvQfkw95b+QdYfPAySJ8WhthcpMErM/VBtBg8dbuOHT7bd1zyY94901TXAkcLb8p1kUEuPZpRl/PQjLgLYSBJBf0A5jTn8IjnnIEo26iGObzhSqfpq5rtFsWlJrzmwofz8XnmV8gbJW89+NnlkO12S2KPztysC5qlfOHGq8s7vvK/yieu+Xq5+8H79dNy+HMBdp62BapzsNBEgIQDDPUuoOtq/hE2CXXSQtxp2lgiumiip+n7Eg2caoxxFoTx0g7mZPiaq0uv7EViKTtIU8eQnMlkqOVqetYZcPE7pA8+sqFsv3qb8mL5TZNfOOj48vSd9x8EPzpoiyxolnTBzdeVd8vtvU9cc2m57p47ZFmu0A+C42OHmPPRsaiTSRUh6gTVF270kBs6aSIDA7nB/WGVMFCUvwAGrm6TReMZew3pdxAVZhyDgDmBET6pi/XWtGH18U0/ddRsZtQkEmWkiUWMrz7Att/aHeVXpp6ot+OO9i+FiZjNaGzRBc06b5Dr6k9e+/Xy0asvKeffdG25UX6hEp+ewmedcctPX0bqGZwRtdWr5H7i+j7pIzwwGDgo2MQO3BDCk8M24rnERGTEHWERz9xOWogrMcvyEiGZzLZ8PJkSPIqHu8NxusEH2HBcsZDx9Vx7yteFHbvLfuWUPQ8rL9jzkIK7GFt6e0wWdB7Et+/5rv5i7OduuKpcfOu3C3475vYH7yv3bHhQ5wh/lUuXOOZydLbpJjK0R/gQq2CzeCsckv1BU4fW1EQaf4F4jQoejaRFqFYwWThWQyYkW+M7ka4b7IxnOyeY4BaNirmA8VVc+IdrYnyl7RO221V+C3vv8sxdDixH77RP2VfOzI/l9pgv6Dw4vEC4VX6t55q7bi/X3H17ufCW68pX5Tbgt+66tdwmOBY5butwwwJPh19t+LDGiKPFljGsCky64Wbn63lz6F7X8MZomK4UYP9DRIZmj4fRomgwr0ex5ICJQhIE8ekdEaBC0hembjOwi4W316sYE5KEARAzIZSzWp5J163aWv5Az7b6N03wZyCetvO+ZX/5wpf91+0svx4lX2k7TKKZtvju/wNrcJMB3WI9RQAAAABJRU5ErkJggg=="
+        style="width: 80px; height: 80px; border-radius: 18px"
+        alt=""
+      />
+    </div>
+    <div class="min-h-screen bg-gray-50 dark:bg-zinc-950 text-gray-900 dark:text-zinc-100 flex flex-col transition-colors duration-200">
+      <!-- Header -->
+      <header class="border-b border-gray-200 dark:border-zinc-800 px-6 pb-4 flex-shrink-0" style="padding-top: calc(1rem + env(safe-area-inset-top))">
+        <div class="max-w-3xl mx-auto flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <img src="/icon.svg" alt="GraPDF" class="w-6 h-6" />
+            <span class="text-base font-semibold tracking-tight">GraPDF</span>
           </div>
-          <div>
-            <label for="trim" class="block text-sm font-medium text-gray-500 dark:text-zinc-400 mb-1.5">Trim <span class="font-normal text-gray-400 dark:text-zinc-500">(pts)</span></label>
-            <input id="trim" v-model.number="trim" type="number" min="0" max="200" placeholder="0" :disabled="binding" class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none focus:border-emerald-500 disabled:opacity-50 transition-colors" />
-          </div>
-          <div>
-            <label for="selector" class="block text-sm font-medium text-gray-500 dark:text-zinc-400 mb-1.5">CSS selector</label>
-            <input id="selector" v-model="selector" type="text" placeholder=".content" :disabled="binding" class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none focus:border-emerald-500 disabled:opacity-50 transition-colors" />
-          </div>
-          <div>
-            <label for="include" class="block text-sm font-medium text-gray-500 dark:text-zinc-400 mb-1.5">Include <span class="font-normal text-gray-400 dark:text-zinc-500">(regex)</span></label>
-            <input id="include" v-model="include" type="text" placeholder="chapter-\d+" :disabled="binding" class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none focus:border-emerald-500 disabled:opacity-50 transition-colors" />
-          </div>
-          <div>
-            <label for="exclude" class="block text-sm font-medium text-gray-500 dark:text-zinc-400 mb-1.5">Exclude <span class="font-normal text-gray-400 dark:text-zinc-500">(regex)</span></label>
-            <input id="exclude" v-model="exclude" type="text" placeholder="appendix" :disabled="binding" class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none focus:border-emerald-500 disabled:opacity-50 transition-colors" />
-          </div>
-          <div>
-            <label for="preview-pages" class="block text-sm font-medium text-gray-500 dark:text-zinc-400 mb-1.5">Preview pages</label>
-            <input id="preview-pages" v-model.number="previewPages" type="number" min="1" placeholder="All pages" :disabled="binding" class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none focus:border-emerald-500 disabled:opacity-50 transition-colors" />
+          <div class="flex items-center gap-3">
+            <button :aria-label="colorMode.preference === 'system' ? 'System mode' : colorMode.preference === 'light' ? 'Light mode' : 'Dark mode'" class="p-1.5 rounded-lg text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-200 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors" @click="cycleColorMode">
+              <!-- Monitor: auto/system -->
+              <svg v-if="colorMode.preference === 'system'" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="3" width="20" height="14" rx="2" />
+                <line x1="8" y1="21" x2="16" y2="21" />
+                <line x1="12" y1="17" x2="12" y2="21" />
+              </svg>
+              <!-- Sun: light mode -->
+              <svg v-else-if="colorMode.preference === 'light'" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+              </svg>
+              <!-- Moon: dark mode -->
+              <svg v-else xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+            </button>
+            <a href="https://www.npmjs.com/package/grapdf" target="_blank" rel="noopener" aria-label="npm" class="p-1.5 rounded-lg text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-200 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="currentColor" aria-hidden="true">
+                <path d="M0 0v18h18V0H0zm14.5 14.5H9V5H5.5v9.5H3.5V3.5h11v11z" />
+              </svg>
+            </a>
+            <a href="https://github.com/jayrdeaton/grapdf" target="_blank" rel="noopener" aria-label="GitHub" class="p-1.5 rounded-lg text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-200 hover:bg-gray-100 dark:hover:bg-zinc-800 transition-colors">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12" />
+              </svg>
+            </a>
           </div>
         </div>
+      </header>
 
-        <!-- Submit / Cancel -->
-        <div v-if="!binding" class="flex gap-2">
-          <button :disabled="!url.trim() || previewing" class="flex-none px-5 py-3 border border-gray-300 dark:border-zinc-700 hover:border-gray-400 dark:hover:border-zinc-600 disabled:opacity-50 text-gray-600 dark:text-zinc-300 text-sm font-medium rounded-lg transition-colors" @click="previewUrls">
-            {{ previewing ? 'Scanning…' : 'Preview URLs' }}
-          </button>
-          <button :disabled="!url.trim() || previewing" class="flex-1 bg-emerald-500 hover:bg-emerald-400 disabled:bg-gray-100 dark:disabled:bg-zinc-800 disabled:text-gray-400 dark:disabled:text-zinc-600 text-white font-semibold rounded-lg py-3 text-sm transition-colors" @click="bind">Grab PDFs</button>
+      <!-- Main -->
+      <main class="flex-1 max-w-3xl mx-auto w-full px-6 py-14">
+        <!-- Hero -->
+        <div class="mb-10 text-center">
+          <h1 class="text-4xl font-bold tracking-tight mb-3">Merge all PDFs from any webpage into one booklet.</h1>
+          <p class="text-gray-500 dark:text-zinc-400 text-lg leading-relaxed">Paste a URL containing PDF links, configure your options, and download a merged PDF in seconds.</p>
         </div>
-        <button v-else class="w-full bg-red-500 hover:bg-red-400 text-white font-semibold rounded-lg py-3 text-sm transition-colors" @click="cancel">Cancel</button>
-      </div>
 
-      <!-- Progress terminal — always dark, intentionally -->
-      <div v-if="progress.length > 0 || error" ref="progressContainer" class="bg-black border border-zinc-800 rounded-2xl p-5 mb-6 font-mono text-sm leading-relaxed overflow-auto max-h-64">
-        <p v-for="(msg, i) in progress" :key="i" class="text-emerald-400"><span class="text-zinc-600 select-none">› </span>{{ msg }}</p>
-        <p v-if="error" class="text-red-400"><span class="text-zinc-600 select-none">✗ </span>{{ error }}</p>
-        <span v-if="binding" class="text-zinc-500 animate-pulse">▌</span>
-      </div>
+        <!-- Binder card -->
+        <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl p-6 mb-6 shadow-sm dark:shadow-none">
+          <!-- URL -->
+          <div class="mb-5">
+            <label for="url-input" class="block text-sm font-medium text-gray-500 dark:text-zinc-400 mb-1.5">Page URL</label>
+            <input id="url-input" v-model="url" type="url" placeholder="https://example.com/documents" :disabled="binding" class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-300 dark:border-zinc-700 rounded-lg px-4 py-2.5 text-sm placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none focus:border-emerald-500 disabled:opacity-50 transition-colors" />
+          </div>
 
-      <!-- PDF preview -->
-      <div v-if="previewItem" ref="previewContainer" class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl overflow-hidden mb-6 shadow-sm dark:shadow-none">
-        <div class="flex items-center justify-between px-4 py-2.5 border-b border-gray-100 dark:border-zinc-800">
-          <span class="text-sm font-medium text-gray-700 dark:text-zinc-300 truncate">{{ previewItem.filename }}</span>
-          <div class="flex items-center gap-4 flex-shrink-0 ml-4">
-            <a :href="previewItem.blobUrl" :download="previewItem.filename" class="text-xs font-semibold text-emerald-500 hover:text-emerald-400 transition-colors">↓ Download</a>
-            <button type="button" aria-label="Clear" class="text-gray-400 dark:text-zinc-500 hover:text-red-400 transition-colors" @click="activePreviewId = null">
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
+          <!-- Quick options -->
+          <div class="flex flex-wrap gap-x-5 gap-y-3 mb-5 items-center">
+            <label class="flex items-center gap-2 cursor-pointer select-none">
+              <input v-model="sort" type="checkbox" :disabled="binding" class="w-4 h-4 accent-emerald-500 disabled:opacity-50" />
+              <span class="text-sm text-gray-700 dark:text-zinc-300">Sort</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer select-none">
+              <input v-model="reverse" type="checkbox" :disabled="binding" class="w-4 h-4 accent-emerald-500 disabled:opacity-50" />
+              <span class="text-sm text-gray-700 dark:text-zinc-300">Reverse</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer select-none">
+              <input v-model="autoDownload" type="checkbox" :disabled="binding" class="w-4 h-4 accent-emerald-500 disabled:opacity-50" />
+              <span class="text-sm text-gray-700 dark:text-zinc-300">Auto-download</span>
+            </label>
+            <button :disabled="binding" class="flex items-center gap-1 text-sm text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-200 disabled:opacity-50 transition-colors" @click="showAdvanced = !showAdvanced">
+              Advanced
+              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" :class="showAdvanced ? 'rotate-180' : ''" class="transition-transform">
+                <polyline points="6 9 12 15 18 9" />
               </svg>
             </button>
           </div>
-        </div>
-        <iframe :src="previewItem.blobUrl" class="w-full border-0" style="height: 520px" title="PDF preview" />
-      </div>
 
-      <!-- History -->
-      <div v-if="history.length > 0" class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl mb-6 shadow-sm dark:shadow-none overflow-hidden">
-        <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 dark:border-zinc-800">
-          <span class="text-sm font-medium text-gray-500 dark:text-zinc-400">History</span>
-          <button class="text-xs text-gray-400 dark:text-zinc-500 hover:text-red-500 dark:hover:text-red-400 transition-colors" @click="clearHistory">Clear all</button>
-        </div>
-        <div v-for="(item, index) in history" :key="item.id" :class="['flex items-center gap-3 px-5 py-3 cursor-pointer transition-colors', index < history.length - 1 ? 'border-b border-gray-100 dark:border-zinc-800' : '', activePreviewId === item.id ? 'bg-emerald-50 dark:bg-emerald-950/30' : 'hover:bg-gray-50 dark:hover:bg-zinc-800/50']" @click="activePreviewId = item.id">
-          <!-- PDF icon -->
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 text-gray-400 dark:text-zinc-500">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-            <polyline points="14 2 14 8 20 8" />
-          </svg>
-          <div class="flex-1 min-w-0">
-            <div class="flex items-baseline gap-2">
-              <p class="text-sm font-medium truncate">{{ item.filename }}</p>
-              <span class="flex-shrink-0 text-xs text-gray-400 dark:text-zinc-500">{{ formatSize(item.size) }}</span>
+          <!-- Advanced options -->
+          <div v-if="showAdvanced" class="grid sm:grid-cols-2 gap-4 mb-5 pt-4 border-t border-gray-100 dark:border-zinc-800">
+            <div>
+              <label for="limit" class="block text-sm font-medium text-gray-500 dark:text-zinc-400 mb-1.5">Limit</label>
+              <input id="limit" v-model.number="limitValue" type="number" min="1" placeholder="No limit" :disabled="binding" class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none focus:border-emerald-500 disabled:opacity-50 transition-colors" />
             </div>
-            <div class="flex items-center gap-1.5 mt-0.5 flex-wrap">
-              <span v-for="badge in settingBadges(item.settings)" :key="badge" class="inline-block text-xs px-1.5 py-0.5 rounded bg-gray-100 dark:bg-zinc-800 text-gray-500 dark:text-zinc-400">{{ badge }}</span>
-              <p v-if="settingBadges(item.settings).length === 0" class="text-xs text-gray-400 dark:text-zinc-500 truncate">{{ item.sourceUrl }}</p>
+            <div>
+              <label for="trim" class="block text-sm font-medium text-gray-500 dark:text-zinc-400 mb-1.5">Trim <span class="font-normal text-gray-400 dark:text-zinc-500">(pts)</span></label>
+              <input id="trim" v-model.number="trim" type="number" min="0" max="200" placeholder="0" :disabled="binding" class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none focus:border-emerald-500 disabled:opacity-50 transition-colors" />
+            </div>
+            <div>
+              <label for="selector" class="block text-sm font-medium text-gray-500 dark:text-zinc-400 mb-1.5">CSS selector</label>
+              <input id="selector" v-model="selector" type="text" placeholder=".content" :disabled="binding" class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none focus:border-emerald-500 disabled:opacity-50 transition-colors" />
+            </div>
+            <div>
+              <label for="include" class="block text-sm font-medium text-gray-500 dark:text-zinc-400 mb-1.5">Include <span class="font-normal text-gray-400 dark:text-zinc-500">(regex)</span></label>
+              <input id="include" v-model="include" type="text" placeholder="chapter-\d+" :disabled="binding" class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none focus:border-emerald-500 disabled:opacity-50 transition-colors" />
+            </div>
+            <div>
+              <label for="exclude" class="block text-sm font-medium text-gray-500 dark:text-zinc-400 mb-1.5">Exclude <span class="font-normal text-gray-400 dark:text-zinc-500">(regex)</span></label>
+              <input id="exclude" v-model="exclude" type="text" placeholder="appendix" :disabled="binding" class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none focus:border-emerald-500 disabled:opacity-50 transition-colors" />
+            </div>
+            <div>
+              <label for="preview-pages" class="block text-sm font-medium text-gray-500 dark:text-zinc-400 mb-1.5">Preview pages</label>
+              <input id="preview-pages" v-model.number="previewPages" type="number" min="1" placeholder="All pages" :disabled="binding" class="w-full bg-gray-50 dark:bg-zinc-950 border border-gray-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-sm placeholder-gray-400 dark:placeholder-zinc-600 focus:outline-none focus:border-emerald-500 disabled:opacity-50 transition-colors" />
             </div>
           </div>
-          <span class="flex-shrink-0 text-xs text-gray-400 dark:text-zinc-500">{{ formatTime(item.timestamp) }}</span>
-          <a :href="item.blobUrl" :download="item.filename" class="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black transition-colors" title="Download" @click.stop>
-            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-              <polyline points="7 10 12 15 17 10" />
-              <line x1="12" y1="15" x2="12" y2="3" />
+
+          <!-- Submit / Cancel -->
+          <div v-if="!binding" class="flex gap-2">
+            <button :disabled="!url.trim() || previewing" class="flex-none px-5 py-3 border border-gray-300 dark:border-zinc-700 hover:border-gray-400 dark:hover:border-zinc-600 disabled:opacity-50 text-gray-600 dark:text-zinc-300 text-sm font-medium rounded-lg transition-colors" @click="previewUrls">
+              {{ previewing ? 'Scanning…' : 'Preview URLs' }}
+            </button>
+            <button :disabled="!url.trim() || previewing" class="flex-1 bg-emerald-500 hover:bg-emerald-400 disabled:bg-gray-100 dark:disabled:bg-zinc-800 disabled:text-gray-400 dark:disabled:text-zinc-600 text-white font-semibold rounded-lg py-3 text-sm transition-colors" @click="bind">Grab PDFs</button>
+          </div>
+          <button v-else class="w-full bg-red-500 hover:bg-red-400 text-white font-semibold rounded-lg py-3 text-sm transition-colors" @click="cancel">Cancel</button>
+        </div>
+
+        <!-- Progress terminal — always dark, intentionally -->
+        <div v-if="progress.length > 0 || error" ref="progressContainer" class="bg-black border border-zinc-800 rounded-2xl p-5 mb-6 font-mono text-sm leading-relaxed overflow-auto max-h-64">
+          <p v-for="(msg, i) in progress" :key="i" class="text-emerald-400"><span class="text-zinc-600 select-none">› </span>{{ msg }}</p>
+          <p v-if="error" class="text-red-400"><span class="text-zinc-600 select-none">✗ </span>{{ error }}</p>
+          <span v-if="binding" class="text-zinc-500 animate-pulse">▌</span>
+        </div>
+
+        <!-- PDF preview -->
+        <div v-if="previewItem" ref="previewContainer" class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl overflow-hidden mb-6 shadow-sm dark:shadow-none">
+          <div class="flex items-center justify-between px-4 py-2.5 border-b border-gray-100 dark:border-zinc-800">
+            <span class="text-sm font-medium text-gray-700 dark:text-zinc-300 truncate">{{ previewItem.filename }}</span>
+            <div class="flex items-center gap-4 flex-shrink-0 ml-4">
+              <a :href="previewItem.blobUrl" :download="previewItem.filename" class="text-xs font-semibold text-emerald-500 hover:text-emerald-400 transition-colors">↓ Download</a>
+              <button type="button" aria-label="Clear" class="text-gray-400 dark:text-zinc-500 hover:text-red-400 transition-colors" @click="activePreviewId = null">
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18" />
+                  <line x1="6" y1="6" x2="18" y2="18" />
+                </svg>
+              </button>
+            </div>
+          </div>
+          <iframe :src="previewItem.blobUrl" class="w-full border-0" style="height: 520px" title="PDF preview" />
+        </div>
+
+        <!-- History -->
+        <div v-if="history.length > 0" class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-2xl mb-6 shadow-sm dark:shadow-none overflow-hidden">
+          <div class="flex items-center justify-between px-5 py-3.5 border-b border-gray-100 dark:border-zinc-800">
+            <span class="text-sm font-medium text-gray-500 dark:text-zinc-400">History</span>
+            <button class="text-xs text-gray-400 dark:text-zinc-500 hover:text-red-500 dark:hover:text-red-400 transition-colors" @click="clearHistory">Clear all</button>
+          </div>
+          <div v-for="(item, index) in history" :key="item.id" :class="['flex items-center gap-3 px-5 py-3 cursor-pointer transition-colors', index < history.length - 1 ? 'border-b border-gray-100 dark:border-zinc-800' : '', activePreviewId === item.id ? 'bg-emerald-50 dark:bg-emerald-950/30' : 'hover:bg-gray-50 dark:hover:bg-zinc-800/50']" @click="activePreviewId = item.id">
+            <!-- PDF icon -->
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="flex-shrink-0 text-gray-400 dark:text-zinc-500">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
             </svg>
-          </a>
-        </div>
-      </div>
-
-      <!-- Divider -->
-      <div class="mt-24 pt-12 border-t border-gray-200 dark:border-zinc-800">
-        <h2 class="text-2xl font-semibold mb-8 text-center">Also available as a CLI</h2>
-
-        <!-- Install + Usage -->
-        <div class="grid sm:grid-cols-2 gap-4 mb-8">
-          <div>
-            <p class="text-xs font-semibold text-gray-400 dark:text-zinc-500 uppercase tracking-wider mb-2">Install</p>
-            <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-3 font-mono text-sm text-emerald-600 dark:text-emerald-400 shadow-sm dark:shadow-none">npm install -g grapdf</div>
-          </div>
-          <div>
-            <p class="text-xs font-semibold text-gray-400 dark:text-zinc-500 uppercase tracking-wider mb-2">Usage</p>
-            <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-3 font-mono text-sm text-emerald-600 dark:text-emerald-400 shadow-sm dark:shadow-none">grapdf &lt;url&gt; [output]</div>
-          </div>
-        </div>
-
-        <!-- Options -->
-        <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl p-5 mb-10 font-mono text-sm text-gray-700 dark:text-zinc-300 leading-7 shadow-sm dark:shadow-none">
-          <p><span class="text-emerald-500 dark:text-emerald-400">--sort</span> Sort PDFs alphabetically by URL</p>
-          <p><span class="text-emerald-500 dark:text-emerald-400">--reverse</span> Reverse the order before merging</p>
-          <p><span class="text-emerald-500 dark:text-emerald-400">--limit</span> <span class="text-gray-400 dark:text-zinc-500">n</span> Maximum number of PDFs to include</p>
-          <p><span class="text-emerald-500 dark:text-emerald-400">--selector</span> <span class="text-gray-400 dark:text-zinc-500">css</span> CSS selector to scope link search</p>
-          <p><span class="text-emerald-500 dark:text-emerald-400">--include</span> <span class="text-gray-400 dark:text-zinc-500">regex</span> Include only matching PDF URLs</p>
-          <p><span class="text-emerald-500 dark:text-emerald-400">--exclude</span> <span class="text-gray-400 dark:text-zinc-500">regex</span> Exclude matching PDF URLs</p>
-          <p><span class="text-emerald-500 dark:text-emerald-400">--trim</span> <span class="text-gray-400 dark:text-zinc-500">pts</span> Crop all four sides by N points</p>
-          <p><span class="text-emerald-500 dark:text-emerald-400">--dry-run</span> Preview PDF URLs without downloading</p>
-        </div>
-
-        <!-- Feature cards -->
-        <div class="grid sm:grid-cols-3 gap-4">
-          <div v-for="feature in features" :key="feature.title" class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm dark:shadow-none">
-            <h3 class="font-semibold mb-1.5">{{ feature.title }}</h3>
-            <p class="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed">{{ feature.description }}</p>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-baseline gap-2">
+                <p class="text-sm font-medium truncate">{{ item.filename }}</p>
+                <span class="flex-shrink-0 text-xs text-gray-400 dark:text-zinc-500">{{ formatSize(item.size) }}</span>
+              </div>
+              <div class="flex items-center gap-1.5 mt-0.5 flex-wrap">
+                <span v-for="badge in settingBadges(item.settings)" :key="badge" class="inline-block text-xs px-1.5 py-0.5 rounded bg-gray-100 dark:bg-zinc-800 text-gray-500 dark:text-zinc-400">{{ badge }}</span>
+                <p v-if="settingBadges(item.settings).length === 0" class="text-xs text-gray-400 dark:text-zinc-500 truncate">{{ item.sourceUrl }}</p>
+              </div>
+            </div>
+            <span class="flex-shrink-0 text-xs text-gray-400 dark:text-zinc-500">{{ formatTime(item.timestamp) }}</span>
+            <a :href="item.blobUrl" :download="item.filename" class="flex-shrink-0 flex items-center justify-center w-7 h-7 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-black transition-colors" title="Download" @click.stop>
+              <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+            </a>
           </div>
         </div>
-      </div>
-    </main>
 
-    <!-- Footer -->
-    <footer class="border-t border-gray-200 dark:border-zinc-800 py-6 text-center text-sm text-gray-400 dark:text-zinc-500 flex-shrink-0">
-      Powered by
-      <a href="https://infinitetoken.com" target="_blank" rel="noopener" class="text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-200 underline underline-offset-2 ml-1 transition-colors">Infinite Token</a>
-    </footer>
+        <!-- Divider -->
+        <div class="mt-24 pt-12 border-t border-gray-200 dark:border-zinc-800">
+          <h2 class="text-2xl font-semibold mb-8 text-center">Also available as a CLI</h2>
+
+          <!-- Install + Usage -->
+          <div class="grid sm:grid-cols-2 gap-4 mb-8">
+            <div>
+              <p class="text-xs font-semibold text-gray-400 dark:text-zinc-500 uppercase tracking-wider mb-2">Install</p>
+              <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-3 font-mono text-sm text-emerald-600 dark:text-emerald-400 shadow-sm dark:shadow-none">npm install -g grapdf</div>
+            </div>
+            <div>
+              <p class="text-xs font-semibold text-gray-400 dark:text-zinc-500 uppercase tracking-wider mb-2">Usage</p>
+              <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl px-4 py-3 font-mono text-sm text-emerald-600 dark:text-emerald-400 shadow-sm dark:shadow-none">grapdf &lt;url&gt; [output]</div>
+            </div>
+          </div>
+
+          <!-- Options -->
+          <div class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl p-5 mb-10 font-mono text-sm text-gray-700 dark:text-zinc-300 leading-7 shadow-sm dark:shadow-none">
+            <p><span class="text-emerald-500 dark:text-emerald-400">--sort</span> Sort PDFs alphabetically by URL</p>
+            <p><span class="text-emerald-500 dark:text-emerald-400">--reverse</span> Reverse the order before merging</p>
+            <p><span class="text-emerald-500 dark:text-emerald-400">--limit</span> <span class="text-gray-400 dark:text-zinc-500">n</span> Maximum number of PDFs to include</p>
+            <p><span class="text-emerald-500 dark:text-emerald-400">--selector</span> <span class="text-gray-400 dark:text-zinc-500">css</span> CSS selector to scope link search</p>
+            <p><span class="text-emerald-500 dark:text-emerald-400">--include</span> <span class="text-gray-400 dark:text-zinc-500">regex</span> Include only matching PDF URLs</p>
+            <p><span class="text-emerald-500 dark:text-emerald-400">--exclude</span> <span class="text-gray-400 dark:text-zinc-500">regex</span> Exclude matching PDF URLs</p>
+            <p><span class="text-emerald-500 dark:text-emerald-400">--trim</span> <span class="text-gray-400 dark:text-zinc-500">pts</span> Crop all four sides by N points</p>
+            <p><span class="text-emerald-500 dark:text-emerald-400">--dry-run</span> Preview PDF URLs without downloading</p>
+          </div>
+
+          <!-- Feature cards -->
+          <div class="grid sm:grid-cols-3 gap-4">
+            <div v-for="feature in features" :key="feature.title" class="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl p-5 shadow-sm dark:shadow-none">
+              <h3 class="font-semibold mb-1.5">{{ feature.title }}</h3>
+              <p class="text-sm text-gray-500 dark:text-zinc-400 leading-relaxed">{{ feature.description }}</p>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Footer -->
+      <footer class="border-t border-gray-200 dark:border-zinc-800 py-6 text-center text-sm text-gray-400 dark:text-zinc-500 flex-shrink-0">
+        Powered by
+        <a href="https://infinitetoken.com" target="_blank" rel="noopener" class="text-gray-500 dark:text-zinc-400 hover:text-gray-700 dark:hover:text-zinc-200 underline underline-offset-2 ml-1 transition-colors">Infinite Token</a>
+      </footer>
+    </div>
   </div>
 </template>
 
@@ -289,6 +298,11 @@ const previewItem = computed(() => {
 })
 
 onMounted(() => {
+  const splash = document.getElementById('splash')
+  if (splash) {
+    splash.style.opacity = '0'
+    setTimeout(() => splash.remove(), 250)
+  }
   const stored = localStorage.getItem('autoDownload')
   if (stored !== null) autoDownload.value = stored !== 'false'
 })
